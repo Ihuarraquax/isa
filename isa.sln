@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "isa", "isa\isa.csproj", "{6F498390-933B-4B75-8549-61040A838149}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberFormat", "NumberFormat\NumberFormat.csproj", "{60E6F220-E9EF-45CC-9817-063206A22199}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberFormatTest", "NumberFormatTest\NumberFormatTest.csproj", "{C3252C6B-B6D9-4425-97D6-E6ABFD244E07}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F498390-933B-4B75-8549-61040A838149}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F498390-933B-4B75-8549-61040A838149}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F498390-933B-4B75-8549-61040A838149}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F498390-933B-4B75-8549-61040A838149}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60E6F220-E9EF-45CC-9817-063206A22199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60E6F220-E9EF-45CC-9817-063206A22199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60E6F220-E9EF-45CC-9817-063206A22199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60E6F220-E9EF-45CC-9817-063206A22199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3252C6B-B6D9-4425-97D6-E6ABFD244E07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3252C6B-B6D9-4425-97D6-E6ABFD244E07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3252C6B-B6D9-4425-97D6-E6ABFD244E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3252C6B-B6D9-4425-97D6-E6ABFD244E07}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
