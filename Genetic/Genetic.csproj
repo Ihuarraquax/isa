@@ -2,7 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <RootNamespace>NumberFormatManager</RootNamespace>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\NumberFormat\NumberFormat.csproj" />
+    </ItemGroup>
 
 </Project>

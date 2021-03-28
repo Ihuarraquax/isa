@@ -53,25 +53,34 @@
                                     Header="lp." Width="Auto"/>
                     <GridViewColumn DisplayMemberBinding=
                                     "{Binding Path=Value}" 
+                                    Header="x po selekcji" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding=
+                                    "{Binding Path=ValueBin}" 
+                                    Header="x bin" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding=
+                                    "{Binding Path=IsParent}" 
+                                    Header="rodzic" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding=
+                                    "{Binding Path=PointCut}" 
+                                    Header="pc &lt;0, L-2>" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding=
+                                    "{Binding Path=ChildValueBin}" 
+                                    Header="x bin (dzieci)" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding=
+                                    "{Binding Path=ValueAfterCrossing}" 
+                                    Header="x po krzyżowaniu" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding=
+                                    "{Binding Path=MutatedGenes}" 
+                                    Header="zmutowane geny" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding=
+                                    "{Binding Path=ValueAfterMutationBin}" 
+                                    Header="x po mutacji" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding=
+                                    "{Binding Path=FinalValue}" 
                                     Header="x real" Width="Auto"/>
                     <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=Fx}" 
+                                    "{Binding Path=FxFinalValue}" 
                                     Header="f(x)" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=Gx}" 
-                                    Header="g(x)" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=P}" 
-                                    Header="p(x)" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=Qx}" 
-                                    Header="q(x)" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=R}" 
-                                    Header="r" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=XRel}" 
-                                    Header="X rel" Width="Auto"/>
                 </GridView>
 
             </ListView.View>
