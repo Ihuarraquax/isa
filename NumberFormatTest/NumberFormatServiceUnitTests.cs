@@ -12,7 +12,8 @@ namespace NumberFormatManagerTest
         [SetUp]
         public void Setup()
         {
-            _numberFormatService = new NumberFormatService(-2, 3, 0.001m);
+            var _random = new Random();
+            _numberFormatService = new NumberFormatService(-2, 3, 0.001m,_random);
         }
 
         [Test]

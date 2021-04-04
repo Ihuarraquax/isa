@@ -8,14 +8,15 @@ namespace NumberFormatManager.Services
         public int B { get; set; }
         public decimal D { get; set; }
         public int L { get; set; }
-        
         public int Precision { get; set; }
+        private readonly Random _random;
 
-        public NumberFormatService(int a, int b, decimal d)
+        public NumberFormatService(int a, int b, decimal d,Random random)
         {
             A = a;
             B = b;
             D = d;
+            _random = random;
             Precision = GetPrecision(d);
             
 
@@ -64,7 +65,7 @@ namespace NumberFormatManager.Services
 
         public decimal RandomDecimal()
         {
-            var value = Convert.ToDecimal(new Random().NextDouble());
+            var value = Convert.ToDecimal(_random.NextDouble());
             value *= (B - A);
             value += A;
             return decimal.Round(value, Precision);
