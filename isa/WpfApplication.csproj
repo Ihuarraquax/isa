@@ -1,14 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>WinExe</OutputType>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
-        <UseWPF>true</UseWPF>
-    </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Genetic\GeneticAlgorithmModule.csproj" />
-      <ProjectReference Include="..\NumberFormat\NumberFormat.csproj" />
-    </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Genetic\GeneticAlgorithmModule.csproj" />
+		<ProjectReference Include="..\NumberFormat\NumberFormat.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ScottPlot.WPF" Version="4.1.7-beta" />
+	</ItemGroup>
 
 </Project>

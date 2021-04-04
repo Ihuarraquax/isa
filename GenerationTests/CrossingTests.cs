@@ -1,5 +1,5 @@
 using System.Reflection;
-using isa.Models;
+using GeneticAlgorithmModule.Models;
 using NUnit.Framework;
 namespace GenerationTests
 {

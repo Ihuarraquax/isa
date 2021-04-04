@@ -1,11 +1,11 @@
-﻿using isa.Extensions;
-using NumberFormatManager.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GeneticAlgorithmModule.Extensions;
+using NumberFormatManager.Services;
 
-namespace isa.Models
+namespace GeneticAlgorithmModule.Models
 {
     public class Generation
     {
@@ -14,7 +14,7 @@ namespace isa.Models
         public decimal Pk { get; }
         public decimal Pm { get; }
         private NumberFormatService _manager;
-        public int GenerationNumber { get; set; } = 0;
+        public int GenerationNumber { get; set; } = 1;
 
         public Generation(int a, int b, decimal d, decimal pk, decimal pm, int n)
         {
@@ -35,22 +35,29 @@ namespace isa.Models
         public static Generation From(Generation prevGen)
         {
             var nextGen = new Generation(prevGen._manager, prevGen.Pk, prevGen.Pm, prevGen.N);
-            nextGen.Population = prevGen.Population.Select(_ => new Individual { Value = _.FinalValue }).ToArray();
+            nextGen.Population = prevGen.Population.Select(_ => new Individual { X = _.FinalX }).ToArray();
             nextGen.CalculateFxForPopulation();
+            nextGen.CalculateValueBinForPopulation();
             nextGen.GenerationNumber = prevGen.GenerationNumber + 1;
             return nextGen;
         } 
 
-        public void GenerateInitialPopulationAndCalculateFx()
+        public void GenerateInitialPopulationCalculateFxAndBin()
         {
             initEmptyPopulation();
             for (int i = 0; i < N; i++)
             {
-                Population[i].Value = _manager.RandomDecimal();
+                Population[i].X = _manager.RandomDecimal();
             }
             CalculateFxForPopulation();
+            CalculateValueBinForPopulation();
         }
-        
+
+        private void CalculateValueBinForPopulation()
+        {
+            Population.ForEach(_ => _.XBin = _manager.RealToBin(_.X));
+        }
+
         private void initEmptyPopulation()
         {
             Population = new Individual[N];
@@ -77,7 +84,7 @@ namespace isa.Models
         
         public void CalculateFxForPopulation()
         {
-            Population.ForEach(_ => _.Fx = _manager.CalculateFx(_.Value));
+            Population.ForEach(_ => _.Fx = _manager.CalculateFx(_.X));
         }
 
         public void CalculateGx()
@@ -118,8 +125,8 @@ namespace isa.Models
         {
             Population.ForEach(_ =>
             {
-                _.FinalValue = _manager.BinToReal(_.ValueAfterMutationBin);
-                _.FxFinalValue = _manager.CalculateFx(_.FinalValue);
+                _.FinalX = _manager.BinToReal(_.XAfterMutationBin);
+                _.FinalFx = _manager.CalculateFx(_.FinalX);
             });
         }
 
@@ -128,12 +135,12 @@ namespace isa.Models
             Population.ForEach(_ =>
             {
                 _.MutatedGenes = GenerateGenesToMutate();
-                StringBuilder sb = new StringBuilder(_.ChildValueBin ?? _.ValueAfterSelectionBin);
+                StringBuilder sb = new StringBuilder(_.ChildXBin ?? _.XAfterSelectionBin);
                 _.MutatedGenes.ForEach(i =>
                 {
                     sb[i] = sb[i] == '0' ? '1' : '0';
                 });
-                _.ValueAfterMutationBin = sb.ToString();
+                _.XAfterMutationBin = sb.ToString();
             });
         }
 
@@ -157,7 +164,7 @@ namespace isa.Models
             Population.Where(_ => _.IsParent).ForEach(_ =>
             {
                 var partnership = _.Partners[0];
-                _.ChildValueBin = CrossToParents(_.ValueAfterSelectionBin, partnership.Individual.ValueAfterSelectionBin, partnership.Pointcut);
+                _.ChildXBin = CrossToParents(_.XAfterSelectionBin, partnership.Individual.XAfterSelectionBin, partnership.Pointcut);
             });
         }
 
@@ -228,7 +235,7 @@ namespace isa.Models
 
         public void CalculateNewIndividualsBin()
         {
-            Population.ForEach(_ => _.ValueAfterSelectionBin = _manager.RealToBin(_.ValueAfterSelection));
+            Population.ForEach(_ => _.XAfterSelectionBin = _manager.RealToBin(_.XAfterSelection));
         }
 
         public void CalculateProbablityToSurvive()
@@ -243,7 +250,7 @@ namespace isa.Models
         {
             for (int i = 0; i < Population.Length; i++)
             {
-                Population[i].ValueAfterSelection = Population.First(_ => _.Qx > Population[i].R).Value;
+                Population[i].XAfterSelection = Population.First(_ => _.Qx > Population[i].R).X;
             }
         }
     }
