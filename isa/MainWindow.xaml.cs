@@ -35,27 +35,17 @@ namespace isa
             var b = int.Parse(B.Text);
             var d = decimal.Parse(D.Text, CultureInfo.InvariantCulture);
             var n = int.Parse(N.Text);
-
+            var t = int.Parse(T.Text);
             var pk = decimal.Parse(Pk.Text, CultureInfo.InvariantCulture);
             var pm = decimal.Parse(Pm.Text, CultureInfo.InvariantCulture);
+            var eliteSize = int.Parse(EliteSize.Text);
 
-            var generation = new Generation(a, b, d,pk,pm, n);
 
-            generation.GeneratePopulation();
-            generation.CalculateFxForPopulation();
-            generation.CalculateGx();
-            generation.CalculateP();
-            generation.CalculateQ();
-            generation.CalculateProbablityToSurvive();
-            generation.SelectInviduals();
-            generation.CalculateNewIndividualsBin();
-            generation.MarkParents();
-            generation.PairParentsAndGeneratePointcuts();
-            generation.CrossParents();
-            generation.MutateGenes();
-            generation.CalculateFinalValues();
+            var geneticAlgorithm = new GeneticAlgorithm(a, b, d, pk,pm, n, t, eliteSize);
 
-            List<TableRowLab4> Values = TableRowLab4.MapFromGeneration(generation);
+            geneticAlgorithm.Run();
+
+            List<TableRowLab5> Values = TableRowLab5.MapFromGeneration(geneticAlgorithm.GetFinalGeneration());
             ValuesListView.ItemsSource = Values;
         }
     }

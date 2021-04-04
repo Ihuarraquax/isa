@@ -8,7 +8,6 @@ namespace isa.Models
 {
     public class Individual
     {
-        public int Index { get; set; }
         public decimal Value { get; set; }
         public decimal Fx { get; set; }
         public decimal Gx { get; set; }
@@ -24,6 +23,11 @@ namespace isa.Models
         public string ValueAfterMutationBin { get; set; }
         public decimal FinalValue { get; set; }
         public decimal FxFinalValue { get; set; }
+    }
+
+    public class GenericProperties
+    {
+
     }
 
     public class Partner

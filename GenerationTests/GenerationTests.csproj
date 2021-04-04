@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Genetic\Genetic.csproj" />
+      <ProjectReference Include="..\Genetic\GeneticAlgorithmModule.csproj" />
     </ItemGroup>
 
 </Project>

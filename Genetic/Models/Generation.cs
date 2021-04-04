@@ -14,25 +14,44 @@ namespace isa.Models
         public decimal Pk { get; }
         public decimal Pm { get; }
         private NumberFormatService _manager;
+        public int GenerationNumber { get; set; } = 0;
 
         public Generation(int a, int b, decimal d, decimal pk, decimal pm, int n)
         {
+            _manager = new NumberFormatService(a, b, d);
             N = n;
             Pk = pk;
             Pm = pm;
-            _manager = new NumberFormatService(a, b, d);
-            initPopulation();
         }
 
-        public void GeneratePopulation()
+        public Generation(NumberFormatService manager, decimal pk, decimal pm, int n)
         {
+            _manager = manager;
+            N = n;
+            Pk = pk;
+            Pm = pm;
+        }
+
+        public static Generation From(Generation prevGen)
+        {
+            var nextGen = new Generation(prevGen._manager, prevGen.Pk, prevGen.Pm, prevGen.N);
+            nextGen.Population = prevGen.Population.Select(_ => new Individual { Value = _.FinalValue }).ToArray();
+            nextGen.CalculateFxForPopulation();
+            nextGen.GenerationNumber = prevGen.GenerationNumber + 1;
+            return nextGen;
+        } 
+
+        public void GenerateInitialPopulationAndCalculateFx()
+        {
+            initEmptyPopulation();
             for (int i = 0; i < N; i++)
             {
                 Population[i].Value = _manager.RandomDecimal();
             }
+            CalculateFxForPopulation();
         }
-
-        private void initPopulation()
+        
+        private void initEmptyPopulation()
         {
             Population = new Individual[N];
             for (int i = 0; i < N; i++)
@@ -40,7 +59,22 @@ namespace isa.Models
                 Population[i] = new Individual();
             }
         }
-
+        
+        public void CalculateNewPopulationProperties()
+        {
+            CalculateGx();
+            CalculateP();
+            CalculateQ();
+            CalculateProbablityToSurvive();
+            SelectInviduals();
+            CalculateNewIndividualsBin();
+            MarkParents();
+            PairParentsAndGeneratePointcuts();
+            CrossParents();
+            MutateGenes();
+            CalculateFinalValues();
+        }
+        
         public void CalculateFxForPopulation()
         {
             Population.ForEach(_ => _.Fx = _manager.CalculateFx(_.Value));

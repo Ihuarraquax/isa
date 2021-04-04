@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:isa"
         mc:Ignorable="d"
-        Title="isa-02 Hubert Zabłocki" Height="450" Width="1339">
+        Title="isa Hubert Zabłocki" Height="450" Width="892">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="18*" />
@@ -23,7 +23,7 @@
         <TextBox Name="B" Text="12" HorizontalAlignment="Left" Margin="178,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" MinWidth="15" Width="79" Height="18" Grid.Column="0"/>
 
         <Label Content="d =" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" Height="26" Width="29" Grid.Row="0" Grid.Column="1"/>
-        <ComboBox Name="D" Margin="29,0,123,0" ToolTip="a" VerticalAlignment="Center" Grid.Column="1">
+        <ComboBox Name="D" Margin="29,0,322,0" ToolTip="a" VerticalAlignment="Center" Grid.Column="1">
             <ComboBoxItem>0.1</ComboBoxItem>
             <ComboBoxItem >0.01</ComboBoxItem>
             <ComboBoxItem IsSelected="True">0.001</ComboBoxItem>
@@ -32,14 +32,21 @@
             <ComboBoxItem >0.000001</ComboBoxItem>
         </ComboBox>
 
-        <Label Content="N =" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" Height="26" Width="29" Grid.Row="0" Grid.Column="2"/>
-        <TextBox  Name="N" Text="10" HorizontalAlignment="Left" Margin="34,0,0,0"  TextWrapping="Wrap" VerticalAlignment="Center" MinWidth="30" Width="113"  Height="18" Grid.Column="2"/>
+        <Label Content="N =" HorizontalAlignment="Left" Margin="130,0,0,0" VerticalAlignment="Center" Height="26" Width="29" Grid.Column="1"/>
+        <TextBox  Name="N" Text="10" HorizontalAlignment="Left" Margin="159,0,0,0"  TextWrapping="Wrap" VerticalAlignment="Center" MinWidth="30" Width="113"  Height="18" Grid.Column="1"/>
 
-        <Label Content="Pk =" HorizontalAlignment="Left" Margin="157,0,0,0" VerticalAlignment="Center" Height="26" Width="34" Grid.Column="2"/>
-        <TextBox  Name="Pk" Text="0.75" HorizontalAlignment="Left" Margin="191,0,0,0"  TextWrapping="Wrap" VerticalAlignment="Center" MinWidth="30" Width="60"  Height="18" Grid.Column="2"/>
+        <Label Content="T =" HorizontalAlignment="Left" Margin="277,0,0,0" VerticalAlignment="Center" Height="26" Width="29" Grid.Column="1"/>
+        <TextBox  Name="T" Text="50" HorizontalAlignment="Left" Margin="303,0,0,0"  TextWrapping="Wrap" VerticalAlignment="Center" MinWidth="30" Width="113"  Height="18" Grid.Column="1"/>
 
-        <Label Content="Pm =" HorizontalAlignment="Left" Margin="270,0,0,0" VerticalAlignment="Center" Height="26" Width="34" Grid.Column="2"/>
-        <TextBox  Name="Pm" Text="0.005" HorizontalAlignment="Left" Margin="304,0,0,0"  TextWrapping="Wrap" VerticalAlignment="Center" MinWidth="30" Width="60"  Height="18" Grid.Column="2"/>
+
+        <Label Content="Pk =" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Height="26" Width="34" Grid.Column="2"/>
+        <TextBox  Name="Pk" Text="0.75" HorizontalAlignment="Left" Margin="49,0,0,0"  TextWrapping="Wrap" VerticalAlignment="Center" MinWidth="30" Width="60"  Height="18" Grid.Column="2"/>
+
+        <Label Content="Pm =" HorizontalAlignment="Left" Margin="114,0,0,0" VerticalAlignment="Center" Height="26" Width="38" Grid.Column="2"/>
+        <TextBox  Name="Pm" Text="0.005" HorizontalAlignment="Left" Margin="157,0,0,0"  TextWrapping="Wrap" VerticalAlignment="Center" MinWidth="30" Width="60"  Height="18" Grid.Column="2"/>
+
+        <Label Content="Rozmiar elity =" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Height="26" Width="88" Grid.Column="0" Grid.Row="1"/>
+        <TextBox  Name="EliteSize" Text="1" HorizontalAlignment="Center" Margin="0,9,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="30" Width="60"  Height="18" Grid.Row="1"/>
 
         <Button Content="Losuj liczby" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click"/>
 
@@ -55,32 +62,8 @@
                                     "{Binding Path=Value}" 
                                     Header="x po selekcji" Width="Auto"/>
                     <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=ValueBin}" 
-                                    Header="x bin" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=IsParent}" 
-                                    Header="rodzic" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=PointCut}" 
-                                    Header="pc &lt;0, L-2>" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=ChildValueBin}" 
-                                    Header="x bin (dzieci)" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=ValueAfterCrossing}" 
-                                    Header="x po krzyżowaniu" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=MutatedGenes}" 
-                                    Header="zmutowane geny" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=ValueAfterMutationBin}" 
-                                    Header="x po mutacji" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=FinalValue}" 
-                                    Header="x real" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding=
-                                    "{Binding Path=FxFinalValue}" 
-                                    Header="f(x)" Width="Auto"/>
+                                    "{Binding Path=Fx}" 
+                                    Header="fx" Width="Auto"/>
                 </GridView>
 
             </ListView.View>

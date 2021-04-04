@@ -81,4 +81,28 @@ namespace isa
             return tableRowList;
         }
     }
+
+    public class TableRowLab5
+    {
+        public int Index { get; set; }
+        public decimal Value { get; set; }
+        public decimal Fx { get; set; }
+
+        public static List<TableRowLab5> MapFromGeneration(Generation generation)
+        {
+            var tableRowList = new List<TableRowLab5>();
+
+            for (int i = 0; i < generation.N; i++)
+            {
+                var individual = generation.Population[i];
+                tableRowList.Add(new TableRowLab5
+                {
+                    Index = i + 1,
+                    Value = individual.Value,
+                    Fx = individual.Fx
+                });
+            }
+            return tableRowList;
+        }
+    }
 }
