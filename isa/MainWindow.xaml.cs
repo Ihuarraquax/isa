@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Windows;
+using CsvHelper;
 using GeneticAlgorithmModule.Models;
 using GeneticAlgorithmModule.Models.Serializable;
 using Microsoft.Win32;
 using ScottPlot;
 using WpfApplication.ViewModels;
+using Zad2;
 
 namespace WpfApplication
 {
@@ -110,6 +113,47 @@ namespace WpfApplication
         private void GenerationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             DisplayGenerationInRunDataGrid((int) e.NewValue);
+        }
+
+        private void ImportTestCsv(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                using var reader = new StreamReader(openFileDialog.FileName);
+                using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
+                var records = csvReader.GetRecords<ResultDTO>().ToList();
+                TestsDataGrid.ItemsSource = records;
+
+                var TSummary = records.GroupBy(_ => _.T).Select(_ => new
+                {
+                    T = _.Key,
+                    SredniaSrednich = _.Average(_ => _.Favg)
+                }).ToList();
+                TSummaryDataGrid.ItemsSource = TSummary;
+
+                var NSummary = records.GroupBy(_ => _.N).Select(_ => new
+                {
+                    N = _.Key,
+                    SredniaSrednich = _.Average(_ => _.Favg)
+                }).ToList();
+                NSummaryDataGrid.ItemsSource = NSummary;
+
+                var PkSummary = records.GroupBy(_ => _.Pk).Select(_ => new
+                {
+                    Pk = _.Key,
+                    SredniaSrednich = _.Average(_ => _.Favg)
+                }).ToList();
+                PkSummaryDataGrid.ItemsSource = PkSummary;
+
+                var PmSummary = records.GroupBy(_ => _.Pm).Select(_ => new
+                {
+                    Pm = _.Key,
+                    SredniaSrednich = _.Average(_ => _.Favg)
+                }).ToList();
+                PmSummaryDataGrid.ItemsSource = PmSummary;
+
+            }
         }
     }
 }

@@ -88,7 +88,7 @@
         <Button Content="Uruchom algorytm" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
                 Click="RunAlgorithm" Height="44" Width="152" />
 
-        <TabControl Name="TabControl" Grid.Row="2" Grid.ColumnSpan="3" Visibility="Hidden">
+        <TabControl Name="TabControl" Grid.Row="2" Grid.ColumnSpan="3" Visibility="Visible">
             <TabItem Header="Wynik">
                 <DataGrid Name="SummaryDataGrid"></DataGrid>
             </TabItem>
@@ -156,8 +156,39 @@
             <TabItem Header="Wykres">
                 <WpfPlot Name="WpfPlot1" />
             </TabItem>
-        </TabControl>
+            <TabItem Header="Testy">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Label Content="W tym miejscu można zaimportować plik CSV z wynikami testów z zadania drugiego" Grid.Row="0"/>
+                    <Button Content="Importuj" Width="100" Grid.Row="1" Click="ImportTestCsv"/>
+                    <DataGrid Name="TestsDataGrid" Grid.Row="2" Grid.Column="0"/>
+                    <Grid Grid.Row="2" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
+                        <DataGrid Name="NSummaryDataGrid" Grid.Row="0" Grid.Column="0"/>
+                        <DataGrid Name="TSummaryDataGrid" Grid.Row="0" Grid.Column="1"/>
+                        <DataGrid Name="PkSummaryDataGrid" Grid.Row="1" Grid.Column="0"/>
+                        <DataGrid Name="PmSummaryDataGrid" Grid.Row="1" Grid.Column="1"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
 
     </Grid>
 </Window>

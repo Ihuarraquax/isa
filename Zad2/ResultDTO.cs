@@ -4,17 +4,17 @@ namespace Zad2
 {
     public class ResultDTO
     {
-        [Name("n")]
+        [Index(0)]
         public int N { get; set; }
-        [Name("t")]
+        [Index(1)]
         public int T { get; set; }
-        [Name("pk")]
+        [Index(2)]
         public decimal Pk { get; set; }
-        [Name("pm")]
+        [Index(3)]
         public decimal Pm { get; set; }
-        [Name("fMax")]
+        [Index(4)]
         public decimal Fmax { get; set; }
-        [Name("fAvg")]
+        [Index(5)]
         public decimal Favg { get; set; }
     }
 }

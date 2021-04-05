@@ -9,7 +9,7 @@ namespace GeneticAlgorithmModule.Models
 {
     public class Generation
     {
-        public Individual[] Population { get; set; }
+        public List<Individual> Population { get; set; }
         public int N { get; }
         public decimal Pk { get; }
         public decimal Pm { get; }
@@ -19,6 +19,7 @@ namespace GeneticAlgorithmModule.Models
 
         public Generation(NumberFormatService numberFormatService, decimal pk, decimal pm, int n, Random random)
         {
+            Population = new List<Individual>();
             _numberFormatService = numberFormatService;
             N = n;
             _random = random;
@@ -29,7 +30,7 @@ namespace GeneticAlgorithmModule.Models
         public static Generation From(Generation prevGen)
         {
             var nextGen = new Generation(prevGen._numberFormatService, prevGen.Pk, prevGen.Pm, prevGen.N, prevGen._random);
-            nextGen.Population = prevGen.Population.Select(_ => new Individual {X = _.FinalX}).ToArray();
+            nextGen.Population = prevGen.Population.Select(_ => new Individual {X = _.FinalX}).ToList();
             nextGen.CalculateFxForPopulation();
             nextGen.CalculateValueBinForPopulation();
             nextGen.GenerationNumber = prevGen.GenerationNumber + 1;
@@ -38,10 +39,12 @@ namespace GeneticAlgorithmModule.Models
 
         public void GenerateInitialPopulationCalculateFxAndBin()
         {
-            initEmptyPopulation();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
-                Population[i].X = _numberFormatService.RandomDecimal();
+                Population.Add(new Individual
+                {
+                    X = _numberFormatService.RandomDecimal()
+                });
             }
 
             CalculateFxForPopulation();
@@ -51,15 +54,6 @@ namespace GeneticAlgorithmModule.Models
         private void CalculateValueBinForPopulation()
         {
             Population.ForEach(_ => _.XBin = _numberFormatService.RealToBin(_.X));
-        }
-
-        private void initEmptyPopulation()
-        {
-            Population = new Individual[N];
-            for (int i = 0; i < N; i++)
-            {
-                Population[i] = new Individual();
-            }
         }
 
         public void CalculateNewPopulationProperties()
@@ -85,7 +79,7 @@ namespace GeneticAlgorithmModule.Models
         public void CalculateGx()
         {
             var fxMin = Population.Select(_ => _.Fx).Min();
-            Population.ForEach(_ => _.Gx = _.Fx - fxMin + _numberFormatService.D);
+            Population.ForEach(_ => _.Gx = (double) (_.Fx - fxMin + _numberFormatService.D));
         }
 
         public void CalculateP()
@@ -96,9 +90,9 @@ namespace GeneticAlgorithmModule.Models
 
         public void CalculateQ()
         {
-            for (int i = 0; i < Population.Length; i++)
+            for (int i = 0; i < Population.Count; i++)
             {
-                if (i == Population.Length - 1)
+                if (i == Population.Count - 1)
                 {
                     Population[i].Qx = 1;
                 }
@@ -121,7 +115,6 @@ namespace GeneticAlgorithmModule.Models
             Population.ForEach(_ =>
             {
                 _.FinalX = _numberFormatService.BinToReal(_.XAfterMutationBin);
-                _.FinalFx = _numberFormatService.CalculateFx(_.FinalX);
             });
         }
 
@@ -138,12 +131,13 @@ namespace GeneticAlgorithmModule.Models
 
         private List<int> GenerateGenesToMutate()
         {
+            var Pmd = (double) Pm;
             var list = new List<int>();
             var l = _numberFormatService.L;
             for (int i = 0; i < l; i++)
             {
-                var r = (decimal) _random.NextDouble();
-                if (r < Pm)
+                var r = _random.NextDouble();
+                if (r < Pmd)
                 {
                     list.Add(i);
                 }
@@ -234,14 +228,22 @@ namespace GeneticAlgorithmModule.Models
 
         public void CalculateProbablityToSurvive()
         {
-            Population.ForEach(_ => { _.R = Convert.ToDecimal(_random.NextDouble()); });
+            Population.ForEach(_ => { _.R = _random.NextDouble(); });
         }
 
         public void SelectInviduals()
         {
-            for (int i = 0; i < Population.Length; i++)
+            for (int i = 0; i < Population.Count; i++)
             {
-                Population[i].XAfterSelection = Population.First(_ => _.Qx > Population[i].R).X;
+                var r = Population[i].R;
+                for (int j = 0; j < Population.Count; j++)
+                {
+                    if (Population[j].Qx > r)
+                    {
+                        Population[i].XAfterSelection = Population[j].X;
+                        break;
+                    }
+                }
             }
         }
     }

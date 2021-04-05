@@ -17,7 +17,7 @@ namespace GeneticAlgorithmModule.Models.Serializable
                 XReal = p.X,
                 XBin = p.XBin,
                 Fx = p.Fx,
-                Percent = ((decimal)finalGeneration.Population.Count(_ => _.X == p.X) / finalGeneration.Population.Length) * 100
+                Percent = ((decimal)finalGeneration.Population.Count(_ => _.X == p.X) / finalGeneration.Population.Count) * 100
             }).OrderByDescending(_ => _.Fx).ToList();
 
             return result;

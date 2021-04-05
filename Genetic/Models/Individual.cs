@@ -7,10 +7,10 @@ namespace GeneticAlgorithmModule.Models
         public decimal X { get; set; }
         public string XBin { get; set; }
         public decimal Fx { get; set; }
-        public decimal Gx { get; set; }
-        public decimal P { get; set; }
-        public decimal Qx { get; set; }
-        public decimal R { get; set; }
+        public double Gx { get; set; }
+        public double P { get; set; }
+        public double Qx { get; set; }
+        public double R { get; set; }
         public decimal XAfterSelection { get; set; }
         public string XAfterSelectionBin { get; set; }
         public bool IsParent { get; set; }
@@ -19,7 +19,6 @@ namespace GeneticAlgorithmModule.Models
         public List<int> MutatedGenes { get; set; }
         public string XAfterMutationBin { get; set; }
         public decimal FinalX { get; set; }
-        public decimal FinalFx { get; set; }
     }
 
     public class Partner

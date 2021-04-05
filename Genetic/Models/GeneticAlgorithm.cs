@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NumberFormatManager.Services;
 
@@ -11,10 +12,9 @@ namespace GeneticAlgorithmModule.Models
         public readonly decimal Pk;
         public readonly decimal Pm;
         public readonly int EliteSize;
-        private readonly Random _random;
 
         public NumberFormatService Manager;
-        public Generation[] Generations { get; set; }
+        public List<Generation> Generations { get; set; }
 
         public GeneticAlgorithm(int a, int b, decimal d, decimal pk, decimal pm, int n, int t, int eliteSize)
         {
@@ -23,35 +23,40 @@ namespace GeneticAlgorithmModule.Models
             N = n;
             T = t;
             EliteSize = eliteSize;
-            _random = new Random();
+            var random = new Random();
 
 
-            Manager = new NumberFormatService(a, b, d, _random);
+            Manager = new NumberFormatService(a, b, d, random);
 
-            Generations = new Generation[T];
-            Generations[0] = new Generation(Manager, Pk, Pm, N, _random);
-            Generations[0].GenerateInitialPopulationCalculateFxAndBin();
+            Generations = new List<Generation>();
+            var initialGeneration = new Generation(Manager, Pk, Pm, N, random);
+            Generations.Add(initialGeneration);
+            initialGeneration.GenerateInitialPopulationCalculateFxAndBin();
         }
 
         public void Run()
         {
-            for (int i = 1; i < Generations.Length; i++)
+            var previousGeneration = Generations[0];
+            for (int i = 1; i < T; i++)
             {
-                Generations[i - 1].CalculateNewPopulationProperties();
-                Generations[i] = Generation.From(Generations[i - 1]);
+                previousGeneration.CalculateNewPopulationProperties();
+                var newGeneration = Generation.From(previousGeneration);
+                Generations.Add(newGeneration);
 
                 if (EliteSize > 0)
                 {
-                    EliteStrategy(i);
+                    EliteStrategy(previousGeneration,newGeneration);
                 }
+
+                previousGeneration = newGeneration;
             }
         }
 
-        private void EliteStrategy(int i)
+        private void EliteStrategy(Generation previousGen, Generation nextGen)
         {
-            var elite = Generations[i - 1].Population.OrderByDescending(_ => _.Fx).Take(EliteSize)
+            var elite = previousGen.Population.OrderByDescending(_ => _.Fx).Take(EliteSize)
                 .Select(_ => new {_.X, _.Fx}).ToArray();
-            var missedElites = elite.Where(e => Generations[i - 1].Population.All(p => p.FinalX != e.X)).ToList();
+            var missedElites = elite.Where(e => previousGen.Population.All(p => p.FinalX != e.X)).ToList();
 
             var j = 0;
             while (missedElites.Any())
@@ -62,10 +67,10 @@ namespace GeneticAlgorithmModule.Models
 
                 while (injected == false && j < N)
                 {
-                    if (elite.All(e => e.X != Generations[i].Population[j].X))
+                    if (elite.All(e => e.X != nextGen.Population[j].X))
                     {
-                        Generations[i].Population[j].X = missedElite.X;
-                        Generations[i].Population[j].Fx = missedElite.Fx;
+                        nextGen.Population[j].X = missedElite.X;
+                        nextGen.Population[j].Fx = missedElite.Fx;
                         injected = true;
                     }
 
@@ -76,7 +81,7 @@ namespace GeneticAlgorithmModule.Models
 
         public Generation GetFinalGeneration()
         {
-            return Generations[T - 1];
+            return Generations[^1];
         }
 
         public decimal Result()

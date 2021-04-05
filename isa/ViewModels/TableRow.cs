@@ -11,10 +11,10 @@ namespace WpfApplication.ViewModels
         public int Index { get; set; }
         public decimal Value { get; set; }
         public decimal Fx { get; set; }
-        public decimal Gx { get; set; }
-        public decimal P { get; set; }
-        public decimal Qx { get; set; }
-        public decimal R { get; set; }
+        public double Gx { get; set; }
+        public double P { get; set; }
+        public double Qx { get; set; }
+        public double R { get; set; }
         public decimal XRel { get; set; }
 
 
@@ -54,7 +54,6 @@ namespace WpfApplication.ViewModels
         public string MutatedGenes { get; set; }
         public string ValueAfterMutationBin { get; set; }
         public decimal FinalValue { get; set; }
-        public decimal FxFinalValue { get; set; }
 
         public static List<TableRowLab4> MapFromGeneration(Generation generation)
         {
@@ -75,7 +74,6 @@ namespace WpfApplication.ViewModels
                     MutatedGenes = string.Join(", ", individual.MutatedGenes),
                     ValueAfterMutationBin = individual.MutatedGenes.Count > 0 ? individual.XAfterMutationBin: "",
                     FinalValue = individual.FinalX,
-                    FxFinalValue = individual.FinalFx
                 });
             }
             return tableRowList;
@@ -112,10 +110,10 @@ namespace WpfApplication.ViewModels
         public decimal X { get; set; }
         public string XBin { get; set; }
         public decimal Fx { get; set; }
-        public decimal Gx { get; set; }
-        public decimal P { get; set; }
-        public decimal Qx { get; set; }
-        public decimal R { get; set; }
+        public double Gx { get; set; }
+        public double P { get; set; }
+        public double Qx { get; set; }
+        public double R { get; set; }
         public decimal XAfterSelection { get; set; }
         public string XBinAfterSelection { get; set; }
         public string IsParent { get; set; }
@@ -125,7 +123,6 @@ namespace WpfApplication.ViewModels
         public string MutatedGenes { get; set; }
         public string XAfterMutationBin { get; set; }
         public decimal FinalX { get; set; }
-        public decimal FinalFx { get; set; }
 
         public static List<TableRowAllProperties> MapFromGeneration(Generation generation)
         {
@@ -153,7 +150,6 @@ namespace WpfApplication.ViewModels
                     MutatedGenes = individual.MutatedGenes != null ? string.Join(", ", individual.MutatedGenes): null,
                     XAfterMutationBin = individual.MutatedGenes != null && individual.MutatedGenes.Count > 0 ? individual.XAfterMutationBin: "",
                     FinalX = individual.FinalX,
-                    FinalFx = individual.FinalFx
                 });
             }
             return tableRowList;

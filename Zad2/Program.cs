@@ -21,13 +21,19 @@ namespace Zad2
             var b = 12;
             var d = 0.001m;
             var eliteSize = 1;
-
-
+            
             var RangeT = new[] {50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150};
             var RangeN = new[] {30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80};
             var RangePk = new[] {0.5m, 0.55m, 0.6m, 0.65m, 0.70m, 0.75m, 0.80m, 0.85m, 0.9m};
             var RangePm = new[] {0.0001m, 0.0005m, 0.001m, 0.002m, 0.003m, 0.004m, 0.005m, 0.006m, 0.007m, 0.008m, 0.009m, 0.01m};
 
+            // var RangeT = new[] {150};
+            // var RangeN = new[] {80};
+            // var RangePk = new[] {0.9m};
+            // var RangePm = new[] {0.01m,0.02m,0.03m,0.04m,0.05m,0.1m,0.15m,0.2m,0.25m,0.3m,0.35m, 0.4m,0.45m, 0.5m};
+            
+            using var writer = new StreamWriter("zad2-testyMutacji.csv", true);
+            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
 
             foreach (var t in RangeT)
             {
@@ -38,7 +44,7 @@ namespace Zad2
                         foreach (var pm in RangePm)
                         {
                             var algorithResults = new List<decimal>();
-                            for (int i = 0; i < 100; i++)
+                            for (int i = 0; i < 1000; i++)
                             {
                                 var algorithm = new GeneticAlgorithm(a, b, d, pk, pm, n, t, eliteSize);
                                 algorithm.Run();
@@ -55,8 +61,7 @@ namespace Zad2
                                 Favg = algorithResults.Average(),
                                 Fmax = algorithResults.Max()
                             };
-                            using var writer = new StreamWriter("zad2.csv", true);
-                            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
                             csv.WriteRecord(resultDTO);
                             csv.NextRecord();
                         }
