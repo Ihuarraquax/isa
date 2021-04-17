@@ -8,6 +8,7 @@ using System.Windows;
 using CsvHelper;
 using GeneticAlgorithmModule.Models;
 using GeneticAlgorithmModule.Models.Serializable;
+using GeoAlgorithmModule.Models;
 using Microsoft.Win32;
 using ScottPlot;
 using WpfApplication.ViewModels;
@@ -23,7 +24,10 @@ namespace WpfApplication
         private GeneticAlgorithm GeneticAlgorithm;
         private GeneticAlgorithmRun GeneticAlgorithmRun;
         private GeneticAlgorithmResult GeneticAlgorithmResult;
-        private GeneticAlgorithmSummary GeneticAlgorithmSummary;
+        private GeneticAlgorithmSummary GeneticAlgorithmSummary;        
+        
+        private GeoAlgorithm GeoAlgorithm;
+
 
         public MainWindow()
         {
@@ -32,7 +36,7 @@ namespace WpfApplication
 
 
 
-        private void RunAlgorithm(object sender, RoutedEventArgs e)
+        private void RunAlgorithmGenetic(object sender, RoutedEventArgs e)
         {
             var a = int.Parse(A.Text);
             var b = int.Parse(B.Text);
@@ -154,6 +158,48 @@ namespace WpfApplication
                 PmSummaryDataGrid.ItemsSource = PmSummary;
 
             }
+        }
+
+        private void RunAlgorithmGeo(object sender, RoutedEventArgs e)
+        {
+            var a = int.Parse(Geo_A.Text);
+            var b = int.Parse(Geo_B.Text);
+            var d = decimal.Parse(Geo_D.Text, CultureInfo.InvariantCulture);
+            var tau = decimal.Parse(Geo_Tau.Text, CultureInfo.InvariantCulture);
+            var t = int.Parse(Geo_T.Text); 
+            
+            GeoAlgorithm = new GeoAlgorithm(a, b, d, tau, t);
+            GeoAlgorithm.Run();
+            DisplaySummaryInGeoSummaryDataGrid();
+            GenerateGeoPlot();
+        }
+        private void DisplaySummaryInGeoSummaryDataGrid()
+        {
+            var last = GeoAlgorithm.IterationResults[GeoAlgorithm.T - 1];
+            var list = new List<IterationResult>()
+            {
+                last
+            };
+            GeoSummaryDataGrid.ItemsSource = list;
+        }
+        private void GenerateGeoPlot()
+        {
+            var plt = GeoWpfPlot1.Plot;
+
+            var xs = GeoAlgorithm.IterationResults.Select(_ => (double) _.Iteration).ToArray();
+
+            var fx = GeoAlgorithm.IterationResults.Select(_ => (double) _.Fx).ToArray();
+            var fxBest = GeoAlgorithm.IterationResults.Select(_ => (double) _.VBestValue).ToArray();
+
+
+            plt.Clear();
+            plt.PlotScatter(xs, fx, label: "fx");
+            plt.PlotScatter(xs, fxBest, label: "fxBest");
+            plt.Legend();
+
+            plt.YLabel("Wartość funkcji");
+            plt.XLabel("Iteracja");
+            GeoWpfPlot1.Render();
         }
     }
 }

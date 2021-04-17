@@ -62,6 +62,11 @@ namespace NumberFormatManager.Services
         {
             return (x % 1) * (decimal)(Math.Cos(Convert.ToDouble(20m * Convert.ToDecimal(Math.PI) * x)) - Math.Sin(Convert.ToDouble(x)));
         }
+        
+        public decimal CalculateFx(string xbin)
+        {
+            return CalculateFx(BinToReal(xbin));
+        }
 
         public decimal RandomDecimal()
         {

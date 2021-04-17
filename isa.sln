@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zad2", "Zad2", "{07681F43-F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindBestParameters", "FindBestParameters\FindBestParameters.csproj", "{7C057436-2B97-49FE-8855-4A6E7CC6BCFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoAlgorithmModule", "GeoAlgorithmModule\GeoAlgorithmModule.csproj", "{87F35E37-BADA-4039-ACC0-407E7835EFDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{7C057436-2B97-49FE-8855-4A6E7CC6BCFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C057436-2B97-49FE-8855-4A6E7CC6BCFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C057436-2B97-49FE-8855-4A6E7CC6BCFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87F35E37-BADA-4039-ACC0-407E7835EFDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87F35E37-BADA-4039-ACC0-407E7835EFDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F35E37-BADA-4039-ACC0-407E7835EFDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87F35E37-BADA-4039-ACC0-407E7835EFDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +81,7 @@ Global
 		{07681F43-F966-481A-8AE0-917533498A2E} = {FED01812-A001-4A18-8889-7DABB4FFC489}
 		{173B22DA-3545-44E1-8409-174C201FBFF6} = {07681F43-F966-481A-8AE0-917533498A2E}
 		{7C057436-2B97-49FE-8855-4A6E7CC6BCFD} = {07681F43-F966-481A-8AE0-917533498A2E}
+		{87F35E37-BADA-4039-ACC0-407E7835EFDC} = {FED01812-A001-4A18-8889-7DABB4FFC489}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {894642B7-C85D-4D1E-BE2A-EEDEA4271ED6}

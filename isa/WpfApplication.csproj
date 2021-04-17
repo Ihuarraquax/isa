@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Genetic\GeneticAlgorithmModule.csproj" />
+		<ProjectReference Include="..\GeoAlgorithmModule\GeoAlgorithmModule.csproj" />
 		<ProjectReference Include="..\NumberFormat\NumberFormat.csproj" />
 		<ProjectReference Include="..\Zad2\Zad2.csproj" />
 	</ItemGroup>
