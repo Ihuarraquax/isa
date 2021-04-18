@@ -5,11 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Windows;
+using System.Windows.Documents;
 using CsvHelper;
 using GeneticAlgorithmModule.Models;
 using GeneticAlgorithmModule.Models.Serializable;
 using GeoAlgorithmModule.Models;
 using Microsoft.Win32;
+using NumberFormatManager.Services;
 using ScottPlot;
 using WpfApplication.ViewModels;
 using Zad2;
@@ -24,8 +26,8 @@ namespace WpfApplication
         private GeneticAlgorithm GeneticAlgorithm;
         private GeneticAlgorithmRun GeneticAlgorithmRun;
         private GeneticAlgorithmResult GeneticAlgorithmResult;
-        private GeneticAlgorithmSummary GeneticAlgorithmSummary;        
-        
+        private GeneticAlgorithmSummary GeneticAlgorithmSummary;
+
         private GeoAlgorithm GeoAlgorithm;
 
 
@@ -33,7 +35,6 @@ namespace WpfApplication
         {
             InitializeComponent();
         }
-
 
 
         private void RunAlgorithmGenetic(object sender, RoutedEventArgs e)
@@ -65,7 +66,6 @@ namespace WpfApplication
         }
 
 
-
         private void GeneratePlot()
         {
             var plt = WpfPlot1.Plot;
@@ -73,8 +73,8 @@ namespace WpfApplication
             var xs = GeneticAlgorithmSummary.Generations.Select(_ => (double) _.GenerationNumber).ToArray();
 
             var fMin = GeneticAlgorithmSummary.Generations.Select(_ => (double) _.FMin).ToArray();
-            var fAvg = GeneticAlgorithmSummary.Generations.Select(_ => (double)_.FAvg).ToArray();
-            var fMax = GeneticAlgorithmSummary.Generations.Select(_ => (double)_.FMax).ToArray();
+            var fAvg = GeneticAlgorithmSummary.Generations.Select(_ => (double) _.FAvg).ToArray();
+            var fMax = GeneticAlgorithmSummary.Generations.Select(_ => (double) _.FMax).ToArray();
 
             plt.Clear();
             plt.PlotScatter(xs, fMax, label: "fmax");
@@ -89,13 +89,14 @@ namespace WpfApplication
 
         private void DisplayGenerationInRunDataGrid(int populationNumber)
         {
-            RunDataGrid.ItemsSource  = TableRowAllProperties.MapFromGeneration(GeneticAlgorithm.Generations[populationNumber - 1]);
+            RunDataGrid.ItemsSource = TableRowAllProperties.MapFromGeneration(GeneticAlgorithm.Generations[populationNumber - 1]);
         }
+
         private void DisplaySummaryInSummaryDataGrid()
         {
             SummaryDataGrid.ItemsSource = GeneticAlgorithmResult.Population;
         }
-        
+
         private void SaveRun(object sender, RoutedEventArgs e)
         {
             var json = JsonSerializer.Serialize(GeneticAlgorithmRun);
@@ -156,7 +157,6 @@ namespace WpfApplication
                     SredniaSrednich = _.Average(_ => _.Favg)
                 }).ToList();
                 PmSummaryDataGrid.ItemsSource = PmSummary;
-
             }
         }
 
@@ -166,22 +166,21 @@ namespace WpfApplication
             var b = int.Parse(Geo_B.Text);
             var d = decimal.Parse(Geo_D.Text, CultureInfo.InvariantCulture);
             var tau = decimal.Parse(Geo_Tau.Text, CultureInfo.InvariantCulture);
-            var t = int.Parse(Geo_T.Text); 
-            
+            var t = int.Parse(Geo_T.Text);
+
             GeoAlgorithm = new GeoAlgorithm(a, b, d, tau, t);
             GeoAlgorithm.Run();
             DisplaySummaryInGeoSummaryDataGrid();
             GenerateGeoPlot();
         }
+
         private void DisplaySummaryInGeoSummaryDataGrid()
         {
-            var last = GeoAlgorithm.IterationResults[GeoAlgorithm.T - 1];
-            var list = new List<IterationResult>()
-            {
-                last
-            };
-            GeoSummaryDataGrid.ItemsSource = list;
+            var last = GeoAlgorithm.IterationResults.Where(_ => _.Iteration == GeoAlgorithm.T).Select(_ => new {_.XBest,_.FxBest }).ToList();
+
+            GeoSummaryDataGrid.ItemsSource = last;
         }
+
         private void GenerateGeoPlot()
         {
             var plt = GeoWpfPlot1.Plot;
@@ -189,7 +188,7 @@ namespace WpfApplication
             var xs = GeoAlgorithm.IterationResults.Select(_ => (double) _.Iteration).ToArray();
 
             var fx = GeoAlgorithm.IterationResults.Select(_ => (double) _.Fx).ToArray();
-            var fxBest = GeoAlgorithm.IterationResults.Select(_ => (double) _.VBestValue).ToArray();
+            var fxBest = GeoAlgorithm.IterationResults.Select(_ => (double) _.FxBest).ToArray();
 
 
             plt.Clear();
@@ -201,5 +200,77 @@ namespace WpfApplication
             plt.XLabel("Iteracja");
             GeoWpfPlot1.Render();
         }
+
+        private void TestGeoAlgorithm(object sender, RoutedEventArgs e)
+        {
+            var t = 2000;
+            var a = -4;
+            var b = 12;
+            var d = 0.001m;
+            var tauRangeList = new List<decimal>();
+
+            var current = 0.5m;
+            var end = 3m;
+            var step = 0.1m;
+            while (current <= end)
+            {
+                tauRangeList.Add(current);
+                current += step;
+            }
+
+            var tauRange = tauRangeList.ToArray();
+            var random = new Random();
+            var manager = new NumberFormatService(a, b, d, random);
+
+            var tauResults = new List<TauTestResult>();
+            foreach (var tau in tauRange)
+            {
+                Console.WriteLine($"testing {tau}");
+                var results = new List<decimal>();
+                var resultsTSelf = new List<decimal>();
+                for (int i = 0; i < 100; i++)
+                {
+                    var algorithm = new GeoAlgorithm(tau, t, random, manager);
+                    algorithm.Run();
+                    results.Add(algorithm.ResultFx);
+                    resultsTSelf.Add(algorithm.SelfBestT);
+                }
+                tauResults.Add(new TauTestResult
+                {
+                  Tau  = tau,
+                  AverageBestFx = results.Average(),
+                  AverageSelfBestIteration = resultsTSelf.Average()
+                });
+            }
+
+            DrawGeoTestPlot(tauResults);
+            GeoTestDataGrid.ItemsSource = tauResults;
+        }
+
+        private void DrawGeoTestPlot(List<TauTestResult> tauResults)
+        {
+            var plt = GeoTestWpfPlot1.Plot;
+
+            var iter = tauResults.Select(_ => Math.Round((double)_.Tau,1)).ToArray();
+
+            var fxAve = tauResults.Select(_ => (double) _.AverageBestFx).ToArray();
+            
+            plt.Clear();
+            plt.PlotBar(iter, fxAve, barWidth: ((double)iter.Length) / 270);
+            plt.Legend();
+            
+            plt.SetAxisLimits(yMin: 0);
+            plt.YLabel("Średni wynik");
+            plt.XLabel("Iteracja");
+            GeoTestWpfPlot1.Render();
+            
+        }
+    }
+
+    public class TauTestResult
+    {
+        public decimal Tau { get; set; }
+        public decimal AverageBestFx { get; set; }
+        public decimal AverageSelfBestIteration { get; set; }
     }
 }

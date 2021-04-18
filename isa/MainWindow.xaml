@@ -115,42 +115,6 @@
                                          Grid.Column="2"
                                          MinWidth="50" />
                                 <DataGrid Name="RunDataGrid" Width="auto" Height="auto" Grid.Row="1" Grid.ColumnSpan="3" />
-                                <!-- <ListView Name="ValuesListView" Width="auto" Height="auto" Grid.Row="1" Grid.ColumnSpan="3"> -->
-                                <!--     <ListView.View> -->
-                                <!--         <GridView> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=Index}" -->
-                                <!--                             Header="lp." Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=Value}" -->
-                                <!--                             Header="x" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=ValueBin}" -->
-                                <!--                             Header="x bin" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=Fx}" -->
-                                <!--                             Header="fx" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=Gx}" -->
-                                <!--                             Header="gx" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=P}" -->
-                                <!--                             Header="p" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=R}" -->
-                                <!--                             Header="r" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=ValueAfterSelection}" -->
-                                <!--                             Header="x po selekcji" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=ValueAfterSelectionBin}" -->
-                                <!--                             Header="x bin" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=IsParent}" -->
-                                <!--                             Header="czy rodzic" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=PointCut}" -->
-                                <!--                             Header="punkt przecięcia" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=ValueAfterCrossing}" -->
-                                <!--                             Header="x po krzyżowaniu" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=MutatedGenes}" -->
-                                <!--                             Header="zmutowane geny" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=FinalValue}" -->
-                                <!--                             Header="x po mutacji" Width="Auto" /> -->
-                                <!--             <GridViewColumn DisplayMemberBinding="{Binding Path=FxFinalValue}" -->
-                                <!--                             Header="fx" Width="Auto" /> -->
-                                <!--         </GridView> -->
-                                <!--     </ListView.View> -->
-                                <!-- </ListView> -->
                                 <WrapPanel Grid.ColumnSpan="3" Grid.Row="2">
                                     <Label Content="Zapisz wynik w formacie JSON:" HorizontalAlignment="Left" VerticalAlignment="Top" />
                                     <Button Content="Przebieg" HorizontalAlignment="Left" VerticalAlignment="Center" Click="SaveRun" />
@@ -270,7 +234,8 @@
                             <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
                     </Grid>
-                    <Button Content="Uruchom algorytm GEO" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Height="44" Width="152" Click="RunAlgorithmGeo" />
+                    <Button Content="Uruchom algorytm GEO" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Height="44" Width="152" Click="RunAlgorithmGeo" />
 
                     <TabControl Name="GeoTabControl" Grid.Row="2" Grid.ColumnSpan="3" Visibility="Visible">
                         <TabItem Header="Wynik">
@@ -278,6 +243,25 @@
                         </TabItem>
                         <TabItem Header="Wykres">
                             <WpfPlot Name="GeoWpfPlot1" />
+                        </TabItem>
+                        <TabItem Header="Testy">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+                                <Button Content="Testuj" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                        Height="44" Width="152" Click="TestGeoAlgorithm" />
+                                <DataGrid Name="GeoTestDataGrid" Width="auto" Height="auto" Grid.Row="1" Grid.Column="0" />
+                                <WpfPlot Name="GeoTestWpfPlot1" Grid.Row="1" Grid.Column="1" />
+                                <WrapPanel Grid.Row="2">
+                                </WrapPanel>
+                            </Grid>
                         </TabItem>
                     </TabControl>
                 </Grid>

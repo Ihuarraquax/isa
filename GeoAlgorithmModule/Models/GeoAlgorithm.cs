@@ -14,6 +14,8 @@ namespace GeoAlgorithmModule.Models
         public readonly Random random;
         public NumberFormatService Manager;
         public List<IterationResult> IterationResults { get; set; }
+        public int SelfBestT { get; set; }
+        public decimal ResultFx => IterationResults[T - 1].FxBest;
 
         public decimal VBestX { get; set; }
         public decimal VBestFx { get; set; }
@@ -21,9 +23,20 @@ namespace GeoAlgorithmModule.Models
         {
             Tau = tau;
             T = t;
+            SelfBestT = t;
             
             random = new Random();
             Manager = new NumberFormatService(a, b, d, random);
+        }
+        
+        public GeoAlgorithm(decimal tau, int t, Random random, NumberFormatService manager)
+        {
+            Tau = tau;
+            T = t;
+            SelfBestT = t;
+
+            this.random = random;
+            Manager = manager;
         }
 
         public void Run()
@@ -86,6 +99,7 @@ namespace GeoAlgorithmModule.Models
                 {
                     VBestX = Manager.BinToReal(resultBin);
                     VBestFx = resultFx;
+                    SelfBestT = iteration + 1;
                 }
 
 
@@ -94,7 +108,8 @@ namespace GeoAlgorithmModule.Models
                     Iteration = iteration + 1,
                     X = Manager.BinToReal(resultBin),
                     Fx = Manager.CalculateFx(resultBin),
-                    VBestValue = VBestFx
+                    XBest = VBestX,
+                    FxBest = VBestFx
                 };
                 
                 IterationResults.Add(iterationResult);
@@ -108,6 +123,8 @@ namespace GeoAlgorithmModule.Models
         public int Iteration { get; set; }
         public decimal X { get; set; }
         public decimal Fx { get; set; }
-        public decimal VBestValue { get; set; }
+        
+        public decimal XBest { get; set; }
+        public decimal FxBest { get; set; }
     }
 }
