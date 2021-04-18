@@ -19,6 +19,7 @@ namespace GeoAlgorithmModule.Models
 
         public decimal VBestX { get; set; }
         public decimal VBestFx { get; set; }
+        public string VBestBin { get; set; }
         public GeoAlgorithm(int a, int b, decimal d, decimal tau, int t)
         {
             Tau = tau;
@@ -99,6 +100,7 @@ namespace GeoAlgorithmModule.Models
                 {
                     VBestX = Manager.BinToReal(resultBin);
                     VBestFx = resultFx;
+                    VBestBin = resultBin;
                     SelfBestT = iteration + 1;
                 }
 
@@ -107,8 +109,10 @@ namespace GeoAlgorithmModule.Models
                 {
                     Iteration = iteration + 1,
                     X = Manager.BinToReal(resultBin),
+                    XBin = resultBin,
                     Fx = Manager.CalculateFx(resultBin),
                     XBest = VBestX,
+                    XBestBin = resultBin,
                     FxBest = VBestFx
                 };
                 
@@ -122,9 +126,11 @@ namespace GeoAlgorithmModule.Models
     {
         public int Iteration { get; set; }
         public decimal X { get; set; }
+        public string XBin { get; set; }
         public decimal Fx { get; set; }
         
         public decimal XBest { get; set; }
+        public string XBestBin { get; set; }
         public decimal FxBest { get; set; }
     }
 }

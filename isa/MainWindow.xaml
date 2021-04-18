@@ -161,7 +161,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Geo">
+            <TabItem Header="Geo" IsSelected="True">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.5*" />
@@ -239,7 +239,17 @@
 
                     <TabControl Name="GeoTabControl" Grid.Row="2" Grid.ColumnSpan="3" Visibility="Visible">
                         <TabItem Header="Wynik">
-                            <DataGrid Name="GeoSummaryDataGrid" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+                                <DataGrid Name="GeoSummaryDataGrid" />
+                                <Button Content="Zapisz przebieg JSON" Width="100" Grid.Row="1" Click="SaveGeoRun" />
+                            </Grid>
                         </TabItem>
                         <TabItem Header="Wykres">
                             <WpfPlot Name="GeoWpfPlot1" />
@@ -256,7 +266,8 @@
                                     <RowDefinition Height="auto" />
                                 </Grid.RowDefinitions>
                                 <Button Content="Testuj" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                        Height="44" Width="152" Click="TestGeoAlgorithm" />
+                                        Height="44" Width="152" Click="TestGeoAlgorithm" Grid.Column="0"/>
+                                <Label Grid.Column="1">Może chwilę potrwać...</Label>
                                 <DataGrid Name="GeoTestDataGrid" Width="auto" Height="auto" Grid.Row="1" Grid.Column="0" />
                                 <WpfPlot Name="GeoTestWpfPlot1" Grid.Row="1" Grid.Column="1" />
                                 <WrapPanel Grid.Row="2">

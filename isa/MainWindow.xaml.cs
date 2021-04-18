@@ -176,7 +176,7 @@ namespace WpfApplication
 
         private void DisplaySummaryInGeoSummaryDataGrid()
         {
-            var last = GeoAlgorithm.IterationResults.Where(_ => _.Iteration == GeoAlgorithm.T).Select(_ => new {_.XBest,_.FxBest }).ToList();
+            var last = GeoAlgorithm.IterationResults.Where(_ => _.Iteration == GeoAlgorithm.T).Select(_ => new {_.XBest, _.FxBest}).ToList();
 
             GeoSummaryDataGrid.ItemsSource = last;
         }
@@ -203,7 +203,7 @@ namespace WpfApplication
 
         private void TestGeoAlgorithm(object sender, RoutedEventArgs e)
         {
-            var t = 2000;
+            var t = 5000;
             var a = -4;
             var b = 12;
             var d = 0.001m;
@@ -228,18 +228,19 @@ namespace WpfApplication
                 Console.WriteLine($"testing {tau}");
                 var results = new List<decimal>();
                 var resultsTSelf = new List<decimal>();
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < 1000; i++)
                 {
                     var algorithm = new GeoAlgorithm(tau, t, random, manager);
                     algorithm.Run();
                     results.Add(algorithm.ResultFx);
                     resultsTSelf.Add(algorithm.SelfBestT);
                 }
+
                 tauResults.Add(new TauTestResult
                 {
-                  Tau  = tau,
-                  AverageBestFx = results.Average(),
-                  AverageSelfBestIteration = resultsTSelf.Average()
+                    Tau = tau,
+                    AverageBestFx = results.Average(),
+                    AverageSelfBestIteration = resultsTSelf.Average()
                 });
             }
 
@@ -251,21 +252,31 @@ namespace WpfApplication
         {
             var plt = GeoTestWpfPlot1.Plot;
 
-            var iter = tauResults.Select(_ => Math.Round((double)_.Tau,1)).ToArray();
+            var iter = tauResults.Select(_ => Math.Round((double) _.Tau, 1)).ToArray();
 
             var fxAve = tauResults.Select(_ => (double) _.AverageBestFx).ToArray();
-            
+
             plt.Clear();
-            plt.PlotBar(iter, fxAve, barWidth: ((double)iter.Length) / 270);
+            plt.PlotBar(iter, fxAve, barWidth: ((double) iter.Length) / 270);
             plt.Legend();
-            
+
             plt.SetAxisLimits(yMin: 0);
             plt.YLabel("Średni wynik");
             plt.XLabel("Iteracja");
             GeoTestWpfPlot1.Render();
-            
+        }
+        
+        private void SaveGeoRun(object sender, RoutedEventArgs e)
+        {
+            var json = JsonSerializer.Serialize(GeoAlgorithm.IterationResults);
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllText(saveFileDialog.FileName, json);
         }
     }
+
+
 
     public class TauTestResult
     {
