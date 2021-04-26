@@ -161,7 +161,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Geo" IsSelected="True">
+            <TabItem Header="Geo" IsSelected="False">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.5*" />
@@ -270,6 +270,117 @@
                                 <Label Grid.Column="1">Może chwilę potrwać...</Label>
                                 <DataGrid Name="GeoTestDataGrid" Width="auto" Height="auto" Grid.Row="1" Grid.Column="0" />
                                 <WpfPlot Name="GeoTestWpfPlot1" Grid.Row="1" Grid.Column="1" />
+                                <WrapPanel Grid.Row="2">
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="ALGORYTM NAJWIĘKSZEGO WZROSTU" IsSelected="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="67*" />
+                        <RowDefinition Height="334*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Label Content="&lt;a , b> =" Grid.Column="0" />
+                        <TextBox Name="Hill_A" Text="-4" Grid.Column="1" Margin="5" />
+                        <TextBox Name="Hill_B" Text="12" Grid.Column="2" Margin="5" />
+                    </Grid>
+                    <Grid Grid.Row="0" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Label Content="d =" Grid.Column="0" />
+                        <ComboBox Name="Hill_D" Grid.Column="1" Height="Auto" Margin="0,4,0,4" Width="Auto">
+                            <ComboBoxItem>0.1</ComboBoxItem>
+                            <ComboBoxItem>0.01</ComboBoxItem>
+                            <ComboBoxItem IsSelected="True">0.001</ComboBoxItem>
+                            <ComboBoxItem>0.0001</ComboBoxItem>
+                            <ComboBoxItem>0.00001</ComboBoxItem>
+                            <ComboBoxItem>0.000001</ComboBoxItem>
+                        </ComboBox>
+
+
+                        <Label Content="T =" Height="26" Grid.Column="3" />
+                        <TextBox Name="Hill_T" Text="10" TextWrapping="Wrap" Height="18" Grid.Column="4" />
+                    </Grid>
+
+                    <Grid Grid.Row="0" Grid.Column="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                    </Grid>
+                    <Button Content="Uruchom algorytm HILL" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Height="44" Width="152" Click="RunAlgorithmHill" />
+                    <TabControl Name="HillTabControl" Grid.Row="2" Grid.ColumnSpan="3" Visibility="Visible">
+                        <TabItem Header="Wynik">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+                                <DataGrid Name="HillSummaryDataGrid" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Wykres">
+                            <WpfPlot Name="HillWpfPlot1" />
+                        </TabItem>
+                        <TabItem Header="Testy">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+                                <Button Content="Testuj" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                        Height="44" Width="152" Click="TestHillAlgorithm" Grid.Column="0"/>
+                                <Label Grid.Column="1">Może chwilę potrwać...</Label>
+                                <DataGrid Name="HillTestDataGrid" Width="auto" Height="auto" Grid.Row="1" Grid.Column="0" />
+                                <WpfPlot Name="HillTestWpfPlot1" Grid.Row="1" Grid.Column="1" />
                                 <WrapPanel Grid.Row="2">
                                 </WrapPanel>
                             </Grid>
