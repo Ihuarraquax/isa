@@ -425,6 +425,15 @@ namespace WpfApplication
             plt.Legend();
             HillWpfPlot1.Render();
         }
+
+        private void SaveHillRun(object sender, RoutedEventArgs e)
+        {
+            var json = JsonSerializer.Serialize(HillAlgorithm.Result);
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllText(saveFileDialog.FileName, json);
+        }
     }
 
 

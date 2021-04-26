@@ -360,6 +360,8 @@
                                     <RowDefinition Height="auto" />
                                 </Grid.RowDefinitions>
                                 <DataGrid Name="HillSummaryDataGrid" />
+                                <Button Content="Zapisz przebieg JSON" Width="100" Grid.Row="1" Click="SaveHillRun" />
+
                             </Grid>
                         </TabItem>
                         <TabItem Header="Wykres">
