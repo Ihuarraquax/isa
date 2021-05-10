@@ -11,11 +11,13 @@
 		<ProjectReference Include="..\GeoAlgorithmModule\GeoAlgorithmModule.csproj" />
 		<ProjectReference Include="..\HillAlgorithmModule\HillAlgorithmModule.csproj" />
 		<ProjectReference Include="..\NumberFormat\NumberFormat.csproj" />
+		<ProjectReference Include="..\PSOAlgorithmModule\PSOAlgorithmModule.csproj" />
 		<ProjectReference Include="..\Zad2\Zad2.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="CsvHelper" Version="26.1.0" />
+		<PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
 		<PackageReference Include="ScottPlot.WPF" Version="4.1.7-beta" />
 	</ItemGroup>
 

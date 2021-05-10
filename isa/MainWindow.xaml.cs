@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Windows;
 using System.Windows.Documents;
 using CsvHelper;
@@ -13,6 +15,7 @@ using GeoAlgorithmModule.Models;
 using HillAlgorithmModule;
 using Microsoft.Win32;
 using NumberFormatManager.Services;
+using PSOAlgorithmModule;
 using ScottPlot;
 using WpfApplication.ViewModels;
 using Zad2;
@@ -33,6 +36,7 @@ namespace WpfApplication
 
         private GeoAlgorithm GeoAlgorithm;
         private HillAlgorithm HillAlgorithm;
+        private PSOAlgorithm PsoAlgorithm;
 
 
         public MainWindow()
@@ -434,7 +438,94 @@ namespace WpfApplication
             if (saveFileDialog.ShowDialog() == true)
                 File.WriteAllText(saveFileDialog.FileName, json);
         }
+
+        private void RunAlgorithmPSO(object sender, RoutedEventArgs e)
+        {
+            var a = int.Parse(PSO_A.Text);
+            var b = int.Parse(PSO_B.Text);
+            var d = decimal.Parse(PSO_D.Text, CultureInfo.InvariantCulture);
+            var n = int.Parse(PSO_N.Text);
+            var t = int.Parse(PSO_T.Text);
+            var c1 = decimal.Parse(PSO_C1.Text, CultureInfo.InvariantCulture);
+            var c2 = decimal.Parse(PSO_C2.Text, CultureInfo.InvariantCulture);
+            var c3 = decimal.Parse(PSO_C3.Text, CultureInfo.InvariantCulture);
+            var rs = decimal.Parse(PSO_RS.Text, CultureInfo.InvariantCulture);
+
+            PsoAlgorithm = new PSOAlgorithm(a, b, d, n, t, c1, c2, c3, rs);
+            PsoAlgorithm.Run();
+
+            var result = PsoAlgorithm.Result;
+
+            PSOSummaryDataGrid.ItemsSource = new List<ValueModel>()
+            {
+                result
+            };
+
+            DrawPSOGraph();
+            // worker.DoWork += DrawPSOAnimation;
+            // worker.RunWorkerAsync();
+        }
+        private readonly BackgroundWorker worker = new BackgroundWorker();
+        private void DrawPSOAnimation(object sender, DoWorkEventArgs e)
+        {
+            PsoAlgorithm.Slajds = new List<Slajd>();
+            var zeros = new List<double>(new double[PsoAlgorithm.Particles.Count]);
+            for (int i = 0;
+                i < PsoAlgorithm.Particles[0].Values.Count;
+                i++)
+            {
+                var TResults = PsoAlgorithm.Particles.Select(_ => _.Values[i].XReal).ToList();
+                PsoAlgorithm.Slajds.Add(new Slajd() {Positions = TResults});
+            }
+
+            int ii = 0;
+            while (true)
+            {
+                PsoAnimationWpfPlot1.Plot.Clear();
+                PsoAnimationWpfPlot1.Plot.PlotScatter(PsoAlgorithm.Slajds[ii].Positions.Select(_ => (double)_).ToArray(), zeros.ToArray());
+                PsoAnimationWpfPlot1.Render();
+                ii++;
+                if (ii > PsoAlgorithm.Slajds.Count-1)
+                {
+                    ii = 0;
+                }
+                
+                Thread.Sleep(1000);
+            }
+        }
+
+        private void DrawPSOGraph()
+        {
+            var plot = PsoWpfPlot1.Plot;
+            var xs = Enumerable.Range(1, PsoAlgorithm.Particles[0].Values.Count).Select(_ => (double) _).ToArray();
+            var fMinList = new List<double>();
+            var fAvgList = new List<double>();
+
+            var fMaxList = new List<double>();
+            for (int i = 0;
+                i < PsoAlgorithm.Particles[0].Values.Count;
+                i++)
+            {
+                var TResults = PsoAlgorithm.Particles.Select(_ => _.Values[i].Fx).ToList();
+                fMinList.Add((double) TResults.Min());
+                fAvgList.Add((double) TResults.Average());
+                fMaxList.Add((double) TResults.Max());
+            }
+
+            var fMin = fMinList.ToArray();
+            var fAvg = fAvgList.ToArray();
+            var fMax = fMaxList.ToArray();
+            plot.Clear();
+            plot.PlotScatter(xs, fMax, label: "fmax");
+            plot.PlotScatter(xs, fAvg, label: "favg");
+            plot.PlotScatter(xs, fMin, label: "fmin");
+
+            plot.Legend();
+            PsoWpfPlot1.Render();
+        }
     }
+
+
 
 
     public class TauTestResult

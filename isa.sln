@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoAlgorithmModule", "GeoAl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HillAlgorithmModule", "HillAlgorithmModule\HillAlgorithmModule.csproj", "{7230FB58-9E80-4D01-BA66-16A995707B08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSOAlgorithmModule", "PSOAlgorithmModule\PSOAlgorithmModule.csproj", "{72939F83-1E9E-44D4-BC35-1CF687A9D351}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{7230FB58-9E80-4D01-BA66-16A995707B08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7230FB58-9E80-4D01-BA66-16A995707B08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7230FB58-9E80-4D01-BA66-16A995707B08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72939F83-1E9E-44D4-BC35-1CF687A9D351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72939F83-1E9E-44D4-BC35-1CF687A9D351}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72939F83-1E9E-44D4-BC35-1CF687A9D351}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72939F83-1E9E-44D4-BC35-1CF687A9D351}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +95,7 @@ Global
 		{7C057436-2B97-49FE-8855-4A6E7CC6BCFD} = {07681F43-F966-481A-8AE0-917533498A2E}
 		{87F35E37-BADA-4039-ACC0-407E7835EFDC} = {FED01812-A001-4A18-8889-7DABB4FFC489}
 		{7230FB58-9E80-4D01-BA66-16A995707B08} = {FED01812-A001-4A18-8889-7DABB4FFC489}
+		{72939F83-1E9E-44D4-BC35-1CF687A9D351} = {FED01812-A001-4A18-8889-7DABB4FFC489}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {894642B7-C85D-4D1E-BE2A-EEDEA4271ED6}
