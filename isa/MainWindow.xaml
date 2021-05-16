@@ -440,7 +440,7 @@
                         </ComboBox>
 
                         <Label Content="N =" Height="26" Grid.Column="2" />
-                        <TextBox Name="PSO_N" Text="10" TextWrapping="Wrap" Height="18" Grid.Column="3" />
+                        <TextBox Name="PSO_N" Text="100" TextWrapping="Wrap" Height="18" Grid.Column="3" />
 
                         <Label Content="T =" Height="26" Grid.Column="4" />
                         <TextBox Name="PSO_T" Text="50" TextWrapping="Wrap" Height="18" Grid.Column="5" />
@@ -464,13 +464,13 @@
                             <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
                         <Label Content="C1 =" Grid.Column="0" />
-                        <TextBox Name="PSO_C1" Text="1" Grid.Column="1" Margin="5" />
+                        <TextBox Name="PSO_C1" Text="0.75" Grid.Column="1" Margin="5" />
 
                         <Label Content="C2 =" Grid.Column="2" />
                         <TextBox Name="PSO_C2" Text="1" Grid.Column="3" Margin="5" MinWidth="50" />
 
                         <Label Content="C3 =" Grid.Column="4" />
-                        <TextBox Name="PSO_C3" Text="1" Grid.Column="5" Margin="5" />
+                        <TextBox Name="PSO_C3" Text="1.25" Grid.Column="5" Margin="5" />
 
                         <Label Content="RS =" Grid.Column="6" />
                         <TextBox Name="PSO_RS" Text="3" Grid.Column="7" Margin="5" />
@@ -510,26 +510,10 @@
                             <WpfPlot Name="PsoWpfPlot1" />
                         </TabItem>
                         <TabItem Header="Animacja">
-                            <WpfPlot Name="PsoAnimationWpfPlot1" />
-                        </TabItem>
-                        <TabItem Header="Testy">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="auto" />
-                                </Grid.RowDefinitions>
-                                <Button Content="Testuj" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                        Height="44" Width="152" Click="TestHillAlgorithm" Grid.Column="0" />
-                                <Label Grid.Column="1">Może chwilę potrwać...</Label>
-                                <DataGrid Name="PSOTestDataGrid" Width="auto" Height="auto" Grid.Row="1" Grid.Column="0" />
-                                <WpfPlot Name="PSOTestWpfPlot1" Grid.Row="1" Grid.Column="1" />
-                                <WrapPanel Grid.Row="2" />
-                            </Grid>
+                            <DockPanel>
+                                <Label Name="numerIteracji" Content="Numer Iteracji: " DockPanel.Dock="Top"/>
+                                <WpfPlot Name="PsoAnimationWpfPlot1" />
+                            </DockPanel>
                         </TabItem>
                     </TabControl>
                 </Grid>

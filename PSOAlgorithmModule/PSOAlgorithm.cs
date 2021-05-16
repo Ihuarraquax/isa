@@ -56,30 +56,39 @@ namespace PSOAlgorithmModule
         }
 
 
-
         private void MoveParticles()
         {
             for (int i = 0; i < N; i++)
             {
                 var particle = Particles[i];
-                var XMinusJeden = particle.Values.Last().XReal;
-                var v = (C1 * (decimal) random.NextDouble() * particle.LastV) +
-                            (C2 * (decimal) random.NextDouble() * (particle.Bi.XReal - XMinusJeden)) +
-                            (C3 * (decimal) random.NextDouble() * (particle.Bg.XReal - XMinusJeden));
-                if(XMinusJeden + v < A)
+                var x = particle.Values.Last().X;
+
+
+                var r1 = (decimal) random.NextDouble();
+                var c1 = (C1 * r1 * particle.V);
+
+                var r2 = (decimal) random.NextDouble();
+                var c2 = (C2 * r2 * (particle.Bi.X - x));
+
+                var r3 = (decimal) random.NextDouble();
+                var c3 = (C3 * r3 * (particle.Bg.X - x));
+
+                var v = c1 + c2 + c3;
+
+                if (x + v < A)
                 {
                     particle.Values.Add(new ValueModel(A, Manager.CalculateFx(A)));
                     continue;
                 }
 
-                if (XMinusJeden + v > B)
+                if (x + v > B)
                 {
                     particle.Values.Add(new ValueModel(B, Manager.CalculateFx(B)));
                     continue;
                 }
 
-                particle.LastV = v;
-                particle.Values.Add(new ValueModel(XMinusJeden+ v, Manager.CalculateFx(XMinusJeden+ v)));
+                particle.V = v;
+                particle.Values.Add(new ValueModel(x + v, Manager.CalculateFx(x + v)));
             }
         }
 
@@ -95,20 +104,31 @@ namespace PSOAlgorithmModule
                 }
             }
         }
+
         private void UpdateGlobalKnowledge()
         {
             for (int i = 0; i < N; i++)
             {
                 var particle = Particles[i];
-                var particleX = particle.Values.Last().XReal;
-                var bestInGlobal = Particles.Where(_ => Math.Abs(_.Values.Last().XReal - particleX) <= Rs).Select(_ => _.Values.Last()).FirstOrDefault();
-                particle.Bg = bestInGlobal;
+                var particleX = particle.Values.Last().X;
+                var bestInGlobal = Particles
+                    .Where(_ => Math.Abs(_.Values.Last().X - particleX) <= Rs)
+                    .MaxBy(_ => _.Values.Last().Fx)
+                    .Select(_ => _.Values.Last())
+                    .FirstOrDefault();
+                // var bestInGlobal = Particles.MaxBy(_ => _.Values.Last().Fx).Select(_ => _.Values.Last()).FirstOrDefault();
+                
+                if (bestInGlobal != null && bestInGlobal.Fx > particle.Bg.Fx)
+                {
+                    particle.Bg = bestInGlobal;
+                }
+                
             }
         }
 
         private void CreateSwarm()
         {
-
+            var r = (decimal) random.NextDouble();
             for (int i = 0; i < N; i++)
             {
                 var firstValue = Manager.RandomDecimal();
@@ -124,11 +144,11 @@ namespace PSOAlgorithmModule
                 });
             }
         }
-        
+
         private bool IsDone()
         {
-            var minX = Particles.Min(_ => _.Values.Last().XReal);
-            var maxX = Particles.Max(_ => _.Values.Last().XReal);
+            var minX = Particles.Min(_ => _.Values.Last().X);
+            var maxX = Particles.Max(_ => _.Values.Last().X);
             if (maxX - minX <= D)
             {
                 return true;
@@ -142,9 +162,9 @@ namespace PSOAlgorithmModule
     {
         public List<ValueModel> Values { get; set; }
 
-        //Najlepsze znalezione rezwiazanie
-        public decimal LastV { get; set; } = 0m;
-        
+        // Fał
+        public decimal V { get; set; } = 0;
+
         //Najlepsze znalezione rezwiazanie
         public ValueModel Bi { get; set; }
 
@@ -154,18 +174,19 @@ namespace PSOAlgorithmModule
 
     public class ValueModel
     {
-        public decimal XReal { get; }
+        public decimal X { get; }
         public decimal Fx { get; }
 
-        public ValueModel(decimal xReal, decimal fx)
+        public ValueModel(decimal x, decimal fx)
         {
-            XReal = xReal;
+            X = x;
             Fx = fx;
         }
     }
-    
+
     public class Slajd
     {
-        public List<decimal> Positions { get; set; }
+        public double[] valuesX;
+        public double[] valuesY;
     }
 }

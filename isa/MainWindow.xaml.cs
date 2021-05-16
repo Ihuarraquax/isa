@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Threading;
 using CsvHelper;
 using GeneticAlgorithmModule.Models;
 using GeneticAlgorithmModule.Models.Serializable;
@@ -27,8 +29,6 @@ namespace WpfApplication
     /// </summary>
     public partial class MainWindow : Window
     {
-        #region MyRegion
-
         private GeneticAlgorithm GeneticAlgorithm;
         private GeneticAlgorithmRun GeneticAlgorithmRun;
         private GeneticAlgorithmResult GeneticAlgorithmResult;
@@ -441,6 +441,9 @@ namespace WpfApplication
 
         private void RunAlgorithmPSO(object sender, RoutedEventArgs e)
         {
+            _updateDataTimer?.Dispose();
+            _renderTimer?.Stop();
+            i = 0;
             var a = int.Parse(PSO_A.Text);
             var b = int.Parse(PSO_B.Text);
             var d = decimal.Parse(PSO_D.Text, CultureInfo.InvariantCulture);
@@ -462,36 +465,71 @@ namespace WpfApplication
             };
 
             DrawPSOGraph();
-            // worker.DoWork += DrawPSOAnimation;
-            // worker.RunWorkerAsync();
+            DrawPSOAnimation();
         }
-        private readonly BackgroundWorker worker = new BackgroundWorker();
-        private void DrawPSOAnimation(object sender, DoWorkEventArgs e)
+        
+        
+        private Timer _updateDataTimer;
+        private DispatcherTimer _renderTimer;
+        private double[] liveDataX;
+        private double[] liveDataY;
+        private void DrawPSOAnimation()
         {
             PsoAlgorithm.Slajds = new List<Slajd>();
-            var zeros = new List<double>(new double[PsoAlgorithm.Particles.Count]);
+            liveDataX = new double[PsoAlgorithm.N];
+            liveDataY = new double[PsoAlgorithm.N];
+
             for (int i = 0;
                 i < PsoAlgorithm.Particles[0].Values.Count;
                 i++)
             {
-                var TResults = PsoAlgorithm.Particles.Select(_ => _.Values[i].XReal).ToList();
-                PsoAlgorithm.Slajds.Add(new Slajd() {Positions = TResults});
-            }
+                var TResults = PsoAlgorithm.Particles.Select(_ => _.Values[i].X).ToList();
 
-            int ii = 0;
-            while (true)
-            {
-                PsoAnimationWpfPlot1.Plot.Clear();
-                PsoAnimationWpfPlot1.Plot.PlotScatter(PsoAlgorithm.Slajds[ii].Positions.Select(_ => (double)_).ToArray(), zeros.ToArray());
-                PsoAnimationWpfPlot1.Render();
-                ii++;
-                if (ii > PsoAlgorithm.Slajds.Count-1)
+                PsoAlgorithm.Slajds.Add(new Slajd()
                 {
-                    ii = 0;
-                }
-                
-                Thread.Sleep(1000);
+                    valuesX = TResults.Select(_ => (double) _).ToArray(),
+                    valuesY = TResults.Select(_ => (double) PsoAlgorithm.Manager.CalculateFx(_)).ToArray()
+                });
             }
+            var plt = PsoAnimationWpfPlot1.Plot;
+            plt.Clear();
+            var func = new Func<double, double?>((x) => (double) PsoAlgorithm.Manager.CalculateFx((decimal) x));
+            plt.PlotFunction(func, lineWidth: 0.1, label: "f(x)");
+            plt.PlotScatter(liveDataX, liveDataY, lineWidth: 0, markerSize: 8);
+            plt.SetAxisLimitsX(PsoAlgorithm.A, PsoAlgorithm.B);
+            var animationSpeed = 200;
+            _updateDataTimer = new Timer(_ => UpdateData(), null, 0, animationSpeed);
+            
+            _renderTimer = new DispatcherTimer();
+            _renderTimer.Interval = TimeSpan.FromMilliseconds(50);
+            _renderTimer.Tick += Render;
+            _renderTimer.Start();
+            
+            Closed += (sender, args) =>
+            {
+                _updateDataTimer?.Dispose();
+                _renderTimer?.Stop();
+            };
+        }
+
+        private int i = 0;
+        void UpdateData()
+        {
+            Trace.WriteLine($"Updating data for slajd {i}");
+            var slajd = PsoAlgorithm.Slajds[i];
+            Array.Copy(slajd.valuesX,liveDataX, liveDataX.Length);
+            Array.Copy(slajd.valuesY,liveDataY, liveDataY.Length);
+            i++;
+            if (i >= PsoAlgorithm.Slajds.Count)
+            {
+                i = 0;
+            }
+        }
+        
+        void Render(object sender, EventArgs e)
+        {
+            PsoAnimationWpfPlot1.Render();
+            numerIteracji.Content = $"T={i}";
         }
 
         private void DrawPSOGraph()
@@ -525,15 +563,10 @@ namespace WpfApplication
         }
     }
 
-
-
-
     public class TauTestResult
     {
         public decimal Tau { get; set; }
         public decimal AverageBestFx { get; set; }
         public decimal AverageSelfBestIteration { get; set; }
     }
-
-    #endregion MyRegion
 }
