@@ -593,6 +593,8 @@ namespace WpfApplication
             }
             CellularAutomata2D.Step();
             StepTextBox.Content = $"Krok = {CellularAutomata2D.StepIndex.ToString()}";
+            StepAliveLabel.Content =
+                $"Życie = {CellularAutomata2D.StepAlive}/{CellularAutomata2D.StepAlive + CellularAutomata2D.StepDead} ({Math.Round((double)CellularAutomata2D.StepAlive / ((double)CellularAutomata2D.StepAlive + CellularAutomata2D.StepDead) * 100 ,2)}%)";
             DrawArea(CellularAutomata2D.Area);
         }
         

@@ -10,6 +10,8 @@ namespace CellularAutomata2D
         public double R { get; set; } = 0.1;
 
         public int StepIndex { get; set; } = 1;
+        public int StepAlive { get; set; } = 1;
+        public int StepDead { get; set; } = 1;
         
         public bool IsFinished { get; set; }
         
@@ -42,6 +44,8 @@ namespace CellularAutomata2D
                 return;
             }
             StepIndex++;
+            StepAlive = 0;
+            StepDead = 0;
             var newArea = new bool[X, Y];
             // calculate every single cell
             IsFinished = true;
@@ -49,22 +53,23 @@ namespace CellularAutomata2D
             {
                 for (int y = 0; y < Y; y++)
                 {
-                    
-                    
                     var somsiads = CalcSomsiads(x, y);
                     if (somsiads == 3)
                     {
                         newArea[x, y] = true;
+                        StepAlive++;
                     }
                     else
                     {
                         if (somsiads == 2 && Area[x,y])
                         {
                             newArea[x, y] = true;
+                            StepAlive++;
                         }
                         else
                         {
                             newArea[x, y] = false;
+                            StepDead++;
                         }
                     }
                    

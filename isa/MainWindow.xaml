@@ -578,6 +578,7 @@
                         <TabItem Header="Animacja">
                             <DockPanel>
                                 <Label Name="StepTextBox" FontSize="30" DockPanel.Dock="Top" />
+                                <Label Name="StepAliveLabel" FontSize="30" DockPanel.Dock="Top" />
                                 <Canvas Name="Area" ClipToBounds="True" Width="400" Height="400" />
                             </DockPanel>
                         </TabItem>
