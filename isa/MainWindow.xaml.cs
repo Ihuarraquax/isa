@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Windows;
-using System.Windows.Documents;
+using System.Windows.Controls;
 using System.Windows.Threading;
+using CellularAutomata2D;
 using CsvHelper;
 using GeneticAlgorithmModule.Models;
 using GeneticAlgorithmModule.Models.Serializable;
@@ -21,6 +24,7 @@ using PSOAlgorithmModule;
 using ScottPlot;
 using WpfApplication.ViewModels;
 using Zad2;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace WpfApplication
 {
@@ -33,7 +37,7 @@ namespace WpfApplication
         private GeneticAlgorithmRun GeneticAlgorithmRun;
         private GeneticAlgorithmResult GeneticAlgorithmResult;
         private GeneticAlgorithmSummary GeneticAlgorithmSummary;
-
+        private CellularAutomata2DAlgorithm CellularAutomata2D;
         private GeoAlgorithm GeoAlgorithm;
         private HillAlgorithm HillAlgorithm;
         private PSOAlgorithm PsoAlgorithm;
@@ -561,6 +565,87 @@ namespace WpfApplication
             plot.Legend();
             PsoWpfPlot1.Render();
         }
+
+        private void Init2D(object sender, RoutedEventArgs e)
+        {
+            
+            CellularAutomata2D = new CellularAutomata2DAlgorithm();
+            CellularAutomata2D.X = int.Parse(CA2D_XY.Text);
+            CellularAutomata2D.Y = int.Parse(CA2D_XY.Text);
+            CellularAutomata2D.R = double.Parse(CA2D_R.Text, CultureInfo.InvariantCulture) / 100;
+            CellularAutomata2D.Mode = CA2D_SasiadMode.Text;
+            CellularAutomata2D.StepMax = int.Parse(CA2D_StepMax.Text);
+            
+            CellularAutomata2D.Init();
+            DrawArea(CellularAutomata2D.Area);
+        }
+        
+        private void Step2D(object sender, EventArgs e)
+        {
+            Step2D();
+        }
+
+        private void Step2D()
+        {
+            if (CellularAutomata2D == null)
+            {
+                return;
+            }
+            CellularAutomata2D.Step();
+            StepTextBox.Content = $"Krok = {CellularAutomata2D.StepIndex.ToString()}";
+            DrawArea(CellularAutomata2D.Area);
+        }
+        
+        private void DrawArea(bool[,] pixels)  
+        {
+            
+            Area.Children.Clear();
+            int resX = pixels.GetUpperBound(0) + 1;
+            int resY = pixels.GetUpperBound(1) + 1;
+            Area.Width = resX * 10;
+            Area.Height = resY * 10;
+            for (int x = 0; x < resX; x++)
+            {
+                for (int y = 0; y < resY; y++)
+                {
+                    var rect = new System.Windows.Shapes.Rectangle
+                    {
+                        Width= 10,
+                        Height= 10,
+                        Fill = pixels[x,y]? Brushes.Black : Brushes.WhiteSmoke
+                    };
+                    Area.Children.Add(rect);
+                    Canvas.SetLeft(rect,x*10);
+                    Canvas.SetTop(rect,y*10);
+                }
+            }
+        }
+        
+        private void StartSteps(object sender, RoutedEventArgs e)
+        {
+            if (CellularAutomata2D == null)
+            {
+                return;
+            }
+
+            _renderTimer?.Stop();
+            _renderTimer = new DispatcherTimer();
+            _renderTimer.Interval = TimeSpan.FromMilliseconds(200);
+            _renderTimer.Tick += Step2D;
+            _renderTimer.Start();
+
+            Closed += (sender, args) =>
+            {
+                _renderTimer?.Stop();
+            };
+        }
+        
+        private void StopStep(object sender, RoutedEventArgs e)
+        {
+            _renderTimer?.Stop();
+        }
+
+
     }
 
     public class TauTestResult

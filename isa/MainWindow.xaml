@@ -388,7 +388,7 @@
                     </TabControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="PSO" IsSelected="True">
+            <TabItem Header="PSO" IsSelected="False">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.5*" />
@@ -511,11 +511,82 @@
                         </TabItem>
                         <TabItem Header="Animacja">
                             <DockPanel>
-                                <Label Name="numerIteracji" Content="Numer Iteracji: " DockPanel.Dock="Top"/>
+                                <Label Name="numerIteracji" Content="Numer Iteracji: " DockPanel.Dock="Top" />
                                 <WpfPlot Name="PsoAnimationWpfPlot1" />
                             </DockPanel>
                         </TabItem>
                     </TabControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="2D" IsSelected="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="67*" />
+                        <RowDefinition Height="334*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Label Content="Rozmiar AK =" Grid.Column="0" />
+                        <TextBox Name="CA2D_XY" Text="50" Grid.Column="1" Margin="5" />
+                        <Label Content="% zywych =" Grid.Column="2" />
+                        <TextBox Name="CA2D_R" Text="50" Grid.Column="3" Margin="5" />
+                    </Grid>
+
+                    <Grid Grid.Row="0" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Label Content="Liczba kroków =" Grid.Column="0" />
+                        <TextBox Name="CA2D_StepMax" Text="100" TextWrapping="Wrap" Height="18" Grid.Column="1" />
+
+                        <Label Content="Sąsiedztwo" Grid.Column="2" />
+                        <ComboBox Name="CA2D_SasiadMode" Grid.Column="3" Height="Auto" Margin="0,4,0,4" Width="Auto">
+                            <ComboBoxItem IsSelected="True">Moore</ComboBoxItem>
+                            <ComboBoxItem>Neumann</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+
+                    <Button Content="Init" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"
+                            Height="24" Width="152" Click="Init2D" Margin="133,31,0,0" />
+                    <Button Content="Step" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top"
+                            Height="24" Width="152" Margin="295,31,0,0" Click="Step2D" />
+                    <TabControl Grid.Row="2" Grid.ColumnSpan="3" Visibility="Visible">
+                        <TabItem Header="Animacja">
+                            <DockPanel>
+                                <Label Name="StepTextBox" FontSize="30" DockPanel.Dock="Top" />
+                                <Canvas Name="Area" ClipToBounds="True" Width="400" Height="400" />
+                            </DockPanel>
+                        </TabItem>
+                        <TabItem Header="Wykres" />
+                    </TabControl>
+                    <Button Content="Start" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"
+                            Height="24" Width="152" Margin="167,31,0,0" Grid.Column="1" Click="StartSteps" />
+                    <Button Content="Stop" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"
+                            Height="24" Width="152" Margin="324,31,0,0" Grid.Column="1" Click="StopStep" />
                 </Grid>
             </TabItem>
         </TabControl>
