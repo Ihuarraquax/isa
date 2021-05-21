@@ -653,21 +653,20 @@ namespace WpfApplication
             var rule = byte.Parse(CA1D_AKRule.Text);
             var setup = CA1D_AKSetup.Text.Select(c => c == '1').ToArray();
             var steps = int.Parse(CA1D_NSteps.Text);
-            var butifyAscii = ASCIICONVERTER.IsChecked;
             CellularAutomata1D = new CellularAutomata1DAlgorithm();
-            CellularAutomata1D.GenerateKey(rule,setup,steps,butifyAscii.Value);
-            KeyTextBox.Text = CellularAutomata1D.Key;
+            CellularAutomata1D.GenerateKey(rule,setup,steps);
+            KeyTextBox.Text = CellularAutomata1D.KeyPrintableBytes;
         }
 
         private void Encrypt(object sender, RoutedEventArgs e)
         {
-            CellularAutomata1D.Crypt(CellularAutomata1D.Key, PlainText.Text);
-            Cypher.Text = CellularAutomata1D.Cypher;
+            CellularAutomata1D.Crypt(CellularAutomata1D.KeyPrintableBytes, PlainText.Text);
+            Cypher.Text = CellularAutomata1D.CypherPrintableBytes;
         }
 
         private void Decrypt(object sender, RoutedEventArgs e)
         {
-            CellularAutomata1D.Decrypt(CellularAutomata1D.Key, CypherToDecode.Text);
+            CellularAutomata1D.Decrypt(CellularAutomata1D.KeyPrintableBytes, CypherToDecode.Text);
             Message.Text = CellularAutomata1D.Message;
         }
     }

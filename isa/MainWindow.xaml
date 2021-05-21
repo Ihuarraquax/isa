@@ -645,8 +645,6 @@
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
-                        <CheckBox Name="ASCIICONVERTER" Grid.Row="0" Margin="5,0,0,0" 
-                                  Content="Zamień kody ASCII na drukowalne"/>
                         <Button Content="Utwórz klucz" Grid.Column="0" Grid.Row="1"
                                 Height="24" Width="152" Click="GenerateKey" />
                         <Label Name="KeyLabel" Grid.Row="1" Content="Klucz: " Grid.Column="1"/>

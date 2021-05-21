@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.Text;
 
 namespace CellularAutomata1D
 {
     public class CellularAutomata1DAlgorithm
     {
-        public string Key { get; set; }
         public string KeyPrintableBytes { get; set; }
-        public string Cypher { get; set; }
         public string CypherPrintableBytes { get; set; }
         public string Message { get; set; }
         
-        public void GenerateKey(byte akRule, bool[] bits, int timeSteps, bool butifyAscii)
+        public void GenerateKey(byte akRule, bool[] bits, int timeSteps)
         {
             var rule = new AKRule(akRule);
             
@@ -46,17 +46,10 @@ namespace CellularAutomata1D
                 var end = i + 8 > keyArray.Length - 1 ? keyArray.Length - 1 : i + 8;
                 var sign = new ArraySegment<bool>(keyArray, i, end - i).ToArray();
                 var ascii = ByteHelper.ConvertBoolArrayToByte(sign);
-                if (butifyAscii)
-                {
-                    keyByte.Add(BeautyfulAscii(ascii));
-                }
-                else
-                {
-                    keyByte.Add(ascii);
-                }
-                
+                keyByte.Add(ascii);
+
             }
-            Key = Encoding.ASCII.GetString(keyByte.ToArray());
+            KeyPrintableBytes = ByteHelper.ByteArrayToHex(keyByte.ToArray());
         }
 
         private byte BeautyfulAscii(byte ascii)
@@ -84,9 +77,9 @@ namespace CellularAutomata1D
 
         public void Crypt(string key, string plaintext)
         {
-            var keyBytes = Encoding.ASCII.GetBytes(key);
+            var keyBytes = ByteHelper.HexToByteArray(key);
             var plaintextBytes = Encoding.ASCII.GetBytes(plaintext);
-            var cypher = new byte[keyBytes.Length];
+            var cypher = new byte[plaintextBytes.Length];
 
             if (keyBytes.Length < plaintext.Length)
             {
@@ -101,17 +94,18 @@ namespace CellularAutomata1D
                 for (int j = 0; j < 8; j++)
                 {
                     cypherbits[j] = XOR(bitKey[j], bitPlaintext[j]);
+                    // cypherbits[j] = XOR(bitKey[j], cypherbits[j]);
                 }
                 cypher[i] = ByteHelper.ConvertBoolArrayToByte(cypherbits);
             }
-            Cypher = Encoding.ASCII.GetString(cypher);
+            CypherPrintableBytes = ByteHelper.ByteArrayToHex(cypher);
         }
         
         public void Decrypt(string key,string crypt)
         {
-            var cryptBytes = Encoding.ASCII.GetBytes(crypt);
-            var keyBytes = Encoding.ASCII.GetBytes(key);
-            var plaintextBytes = new byte[keyBytes.Length];
+            var keyBytes = ByteHelper.HexToByteArray(key);
+            var cryptBytes = ByteHelper.HexToByteArray(crypt);
+            var plaintextBytes = new byte[cryptBytes.Length];
 
             if (keyBytes.Length < cryptBytes.Length)
             {
@@ -121,13 +115,13 @@ namespace CellularAutomata1D
             for (int i = 0; i < cryptBytes.Length; i++)
             {
                 var bitKey = ByteHelper.ConvertByteToBoolArray(keyBytes[i]);
-                var bitPlaintext = ByteHelper.ConvertByteToBoolArray(plaintextBytes[i]);
-                var cypherbits = new bool[8];
+                var bitCrypt = ByteHelper.ConvertByteToBoolArray(cryptBytes[i]);
+                var plainText = new bool[8];
                 for (int j = 0; j < 8; j++)
                 {
-                    cypherbits[j] = XOR(bitKey[j], bitPlaintext[j]);
+                    plainText[j] = XOR(bitKey[j], bitCrypt[j]);
                 }
-                plaintextBytes[i] = ByteHelper.ConvertBoolArrayToByte(cypherbits);
+                plaintextBytes[i] = ByteHelper.ConvertBoolArrayToByte(plainText);
             }
             Message = Encoding.ASCII.GetString(plaintextBytes);
         }

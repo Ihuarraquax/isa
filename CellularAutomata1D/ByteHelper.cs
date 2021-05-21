@@ -39,9 +39,18 @@ namespace CellularAutomata1D
             return result;
         }
         
-        public static T[] SubArray<T>(T[] arr, int start, int length) 
+        public static byte[] HexToByteArray(String hex)
         {
-            return new ArraySegment<T>( arr, start, length ).ToArray();
+            int NumberChars = hex.Length;
+            byte[] bytes = new byte[NumberChars / 2];
+            for (int i = 0; i < NumberChars; i += 2)
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            return bytes;
+        }
+
+        public static string ByteArrayToHex(byte[] ba)
+        {
+            return BitConverter.ToString(ba).Replace("-","");
         }
     }
 }
