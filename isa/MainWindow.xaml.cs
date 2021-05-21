@@ -12,6 +12,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using CellularAutomata1D;
 using CellularAutomata2D;
 using CsvHelper;
 using GeneticAlgorithmModule.Models;
@@ -38,6 +39,7 @@ namespace WpfApplication
         private GeneticAlgorithmResult GeneticAlgorithmResult;
         private GeneticAlgorithmSummary GeneticAlgorithmSummary;
         private CellularAutomata2DAlgorithm CellularAutomata2D;
+        private CellularAutomata1DAlgorithm CellularAutomata1D;
         private GeoAlgorithm GeoAlgorithm;
         private HillAlgorithm HillAlgorithm;
         private PSOAlgorithm PsoAlgorithm;
@@ -600,7 +602,6 @@ namespace WpfApplication
         
         private void DrawArea(bool[,] pixels)  
         {
-            
             Area.Children.Clear();
             int resX = pixels.GetUpperBound(0) + 1;
             int resY = pixels.GetUpperBound(1) + 1;
@@ -647,7 +648,28 @@ namespace WpfApplication
             _renderTimer?.Stop();
         }
 
+        private void GenerateKey(object sender, RoutedEventArgs e)
+        {
+            var rule = byte.Parse(CA1D_AKRule.Text);
+            var setup = CA1D_AKSetup.Text.Select(c => c == '1').ToArray();
+            var steps = int.Parse(CA1D_NSteps.Text);
+            var butifyAscii = ASCIICONVERTER.IsChecked;
+            CellularAutomata1D = new CellularAutomata1DAlgorithm();
+            CellularAutomata1D.GenerateKey(rule,setup,steps,butifyAscii.Value);
+            KeyTextBox.Text = CellularAutomata1D.Key;
+        }
 
+        private void Encrypt(object sender, RoutedEventArgs e)
+        {
+            CellularAutomata1D.Crypt(CellularAutomata1D.Key, PlainText.Text);
+            Cypher.Text = CellularAutomata1D.Cypher;
+        }
+
+        private void Decrypt(object sender, RoutedEventArgs e)
+        {
+            CellularAutomata1D.Decrypt(CellularAutomata1D.Key, CypherToDecode.Text);
+            Message.Text = CellularAutomata1D.Message;
+        }
     }
 
     public class TauTestResult

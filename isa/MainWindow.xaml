@@ -518,7 +518,7 @@
                     </TabControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="2D" IsSelected="True">
+            <TabItem Header="2D" IsSelected="False">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.5*" />
@@ -588,7 +588,113 @@
                             Height="24" Width="152" Margin="167,31,0,0" Grid.Column="1" Click="StartSteps" />
                     <Button Content="Stop" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"
                             Height="24" Width="152" Margin="324,31,0,0" Grid.Column="1" Click="StopStep" />
+                    <Button Content="Init" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Height="24" Width="152" Click="Init2D" Margin="133,31,0,0" />
                 </Grid>
+            </TabItem>
+            <TabItem Header="1D" IsSelected="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="67*" />
+                        <RowDefinition Height="334*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Label Content="Reguła AK [0,255] =" Grid.Column="0" />
+                        <TextBox Name="CA1D_AKRule" Text="30" Grid.Column="1" Margin="5" />
+                    </Grid>
+
+                    <Grid Grid.Row="0" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+
+                        <Label Content="Stan początkowy AK =" Grid.Column="0" />
+                        <TextBox Name="CA1D_AKSetup" Text="1010101010" Grid.Column="1" Margin="5" />
+                        <Label Content="Liczba kroków =" Grid.Column="2" />
+                        <TextBox Name="CA1D_NSteps" Text="20" Grid.Column="3" Margin="5" />
+                    </Grid>
+
+                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <CheckBox Name="ASCIICONVERTER" Grid.Row="0" Margin="5,0,0,0" 
+                                  Content="Zamień kody ASCII na drukowalne"/>
+                        <Button Content="Utwórz klucz" Grid.Column="0" Grid.Row="1"
+                                Height="24" Width="152" Click="GenerateKey" />
+                        <Label Name="KeyLabel" Grid.Row="1" Content="Klucz: " Grid.Column="1"/>
+                        <TextBox Name="KeyTextBox" Grid.Row="1" Grid.Column="2"/>
+                    </Grid>
+
+                    <TabControl Grid.Row="2" Grid.ColumnSpan="3" Visibility="Visible">
+                        <TabItem Header="Szyfracja">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="67*" />
+                                </Grid.RowDefinitions>
+                                <Label Content="Wiadomość:" Grid.Row="0" Grid.Column="0"></Label>
+                                <TextBox Name="PlainText"  Grid.Row="0" Grid.Column="1"></TextBox>
+                                <Button Content="szyfruj"  Grid.Row="0" Grid.Column="2" Click="Encrypt"></Button>
+
+                                <TextBox Name="Cypher"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"></TextBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Deszyfracja">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="67*" />
+                                </Grid.RowDefinitions>
+                                <Label Content="Szyfr:" Grid.Row="0" Grid.Column="0"></Label>
+                                <TextBox Name="CypherToDecode"  Grid.Row="0" Grid.Column="1"></TextBox>
+                                <Button Content="odszyfruj"  Grid.Row="0" Grid.Column="2" Click="Decrypt"></Button>
+
+                                <TextBox Name="Message"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"></TextBox>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+
+
+                </Grid>
+
             </TabItem>
         </TabControl>
     </Grid>
