@@ -1,11 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
 
         <IsPackable>false</IsPackable>
-
-        <RootNamespace>NumberFormatManagerTest</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,7 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\NumberFormat\NumberFormat.csproj" />
+      <ProjectReference Include="..\..\Modules\Genetic\GeneticAlgorithmModule.csproj" />
+      <ProjectReference Include="..\..\Genetic\GeneticAlgorithmModule.csproj" />
     </ItemGroup>
 
 </Project>
