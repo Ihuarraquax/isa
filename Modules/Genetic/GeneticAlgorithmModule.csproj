@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\NumberFormat\NumberFormat.csproj" />
+      <ProjectReference Include="..\NumberFormat\NumberFormat.csproj" />
     </ItemGroup>
 
 </Project>

@@ -7,10 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Genetic\GeneticAlgorithmModule.csproj" />
 		<ProjectReference Include="..\Modules\Genetic\GeneticAlgorithmModule.csproj" />
-		<ProjectReference Include="..\NumberFormat\NumberFormat.csproj" />
-		<ProjectReference Include="..\Zad2\Zad2.csproj" />
+		<ProjectReference Include="..\Modules\NumberFormat\NumberFormat.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
