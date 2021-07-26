@@ -9,13 +9,13 @@ namespace GeneticAlgorithmModule.Models
 {
     public class Generation
     {
-        public List<Individual> Population { get; set; }
+        public List<Individual> Population { get; private set; }
         public int N { get; }
-        public decimal Pk { get; }
-        public decimal Pm { get; }
+        private decimal Pk { get; }
+        private decimal Pm { get; }
         private readonly NumberFormatService _numberFormatService;
         private readonly Random _random;
-        public int GenerationNumber { get; set; } = 1;
+        public int GenerationNumber { get; private set; } = 1;
 
         public Generation(NumberFormatService numberFormatService, decimal pk, decimal pm, int n, Random random)
         {
@@ -61,8 +61,8 @@ namespace GeneticAlgorithmModule.Models
             CalculateGx();
             CalculateP();
             CalculateQ();
-            CalculateProbablityToSurvive();
-            SelectInviduals();
+            CalculateProbabilityToSurvive();
+            SelectIndividuals();
             CalculateNewIndividualsBin();
             MarkParents();
             PairParentsAndGeneratePointcuts();
@@ -71,24 +71,24 @@ namespace GeneticAlgorithmModule.Models
             CalculateFinalValues();
         }
 
-        public void CalculateFxForPopulation()
+        private void CalculateFxForPopulation()
         {
-            Population.ForEach(_ => _.Fx = _numberFormatService.CalculateFx(_.X));
+            Population.ForEach(_ => _.Fx = NumberFormatService.CalculateFx(_.X));
         }
 
-        public void CalculateGx()
+        private void CalculateGx()
         {
             var fxMin = Population.Select(_ => _.Fx).Min();
             Population.ForEach(_ => _.Gx = (double) (_.Fx - fxMin + _numberFormatService.D));
         }
 
-        public void CalculateP()
+        private void CalculateP()
         {
             var gxSum = Population.Select(v => v.Gx).Sum();
             Population.ForEach(_ => _.P = _.Gx / gxSum);
         }
 
-        public void CalculateQ()
+        private void CalculateQ()
         {
             for (int i = 0; i < Population.Count; i++)
             {
@@ -110,7 +110,7 @@ namespace GeneticAlgorithmModule.Models
             }
         }
 
-        public void CalculateFinalValues()
+        private void CalculateFinalValues()
         {
             Population.ForEach(_ =>
             {
@@ -118,12 +118,12 @@ namespace GeneticAlgorithmModule.Models
             });
         }
 
-        public void MutateGenes()
+        private void MutateGenes()
         {
             Population.ForEach(_ =>
             {
                 _.MutatedGenes = GenerateGenesToMutate();
-                StringBuilder sb = new StringBuilder(_.ChildXBin ?? _.XAfterSelectionBin);
+                var sb = new StringBuilder(_.ChildXBin ?? _.XAfterSelectionBin);
                 _.MutatedGenes.ForEach(i => { sb[i] = sb[i] == '0' ? '1' : '0'; });
                 _.XAfterMutationBin = sb.ToString();
             });
@@ -131,13 +131,13 @@ namespace GeneticAlgorithmModule.Models
 
         private List<int> GenerateGenesToMutate()
         {
-            var Pmd = (double) Pm;
+            var pmd = (double) Pm;
             var list = new List<int>();
             var l = _numberFormatService.L;
             for (int i = 0; i < l; i++)
             {
                 var r = _random.NextDouble();
-                if (r < Pmd)
+                if (r < pmd)
                 {
                     list.Add(i);
                 }
@@ -146,7 +146,7 @@ namespace GeneticAlgorithmModule.Models
             return list;
         }
 
-        public void CrossParents()
+        private void CrossParents()
         {
             Population.Where(_ => _.IsParent).ForEach(_ =>
             {
@@ -157,22 +157,22 @@ namespace GeneticAlgorithmModule.Models
 
         public static string CrossToParents(string p1, string p2, int pointcut)
         {
-            return p1.Substring(0, pointcut + 1) + p2.Substring(pointcut + 1);
+            return p1[..(pointcut + 1)] + p2[(pointcut + 1)..];
         }
 
-        public void MarkParents()
+        private void MarkParents()
         {
             Population.ForEach(_ =>
             {
-                var R = (decimal) _random.NextDouble();
-                if (R < Pk)
+                var r = (decimal) _random.NextDouble();
+                if (r < Pk)
                 {
                     _.IsParent = true;
                 }
             });
         }
 
-        public void PairParentsAndGeneratePointcuts()
+        private void PairParentsAndGeneratePointcuts()
         {
             var parents = Population.Where(_ => _.IsParent).ToArray();
             if (parents.Length < 1)
@@ -180,7 +180,7 @@ namespace GeneticAlgorithmModule.Models
                 return;
             }
 
-            initPartners(parents);
+            InitPartners(parents);
             for (int i = 0; i < parents.Length;)
             {
                 var pointcut = _random.Next(0, _numberFormatService.L - 1);
@@ -216,33 +216,31 @@ namespace GeneticAlgorithmModule.Models
             }
         }
 
-        private void initPartners(Individual[] parents)
+        private static void InitPartners(IEnumerable<Individual> parents)
         {
             parents.ForEach(_ => _.Partners = new List<Partner>());
         }
 
-        public void CalculateNewIndividualsBin()
+        private void CalculateNewIndividualsBin()
         {
             Population.ForEach(_ => _.XAfterSelectionBin = _numberFormatService.RealToBin(_.XAfterSelection));
         }
 
-        public void CalculateProbablityToSurvive()
+        private void CalculateProbabilityToSurvive()
         {
             Population.ForEach(_ => { _.R = _random.NextDouble(); });
         }
 
-        public void SelectInviduals()
+        private void SelectIndividuals()
         {
-            for (int i = 0; i < Population.Count; i++)
+            foreach (var t in Population)
             {
-                var r = Population[i].R;
-                for (int j = 0; j < Population.Count; j++)
+                var r = t.R;
+                foreach (var t1 in Population)
                 {
-                    if (Population[j].Qx > r)
-                    {
-                        Population[i].XAfterSelection = Population[j].X;
-                        break;
-                    }
+                    if (!(t1.Qx > r)) continue;
+                    t.XAfterSelection = t1.X;
+                    break;
                 }
             }
         }

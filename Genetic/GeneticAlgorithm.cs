@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GeneticAlgorithmModule.Models;
 using NumberFormatManager.Services;
 
-namespace GeneticAlgorithmModule.Models
+namespace GeneticAlgorithmModule
 {
     public class GeneticAlgorithm
     {
@@ -13,8 +14,8 @@ namespace GeneticAlgorithmModule.Models
         public readonly decimal Pm;
         public readonly int EliteSize;
 
-        public NumberFormatService Manager;
-        public List<Generation> Generations { get; set; }
+        public readonly NumberFormatService Manager;
+        public List<Generation> Generations { get; }
 
         public GeneticAlgorithm(int a, int b, decimal d, decimal pk, decimal pm, int n, int t, int eliteSize)
         {
@@ -25,9 +26,7 @@ namespace GeneticAlgorithmModule.Models
             EliteSize = eliteSize;
             var random = new Random();
 
-
             Manager = new NumberFormatService(a, b, d, random);
-
             Generations = new List<Generation>();
             var initialGeneration = new Generation(Manager, Pk, Pm, N, random);
             Generations.Add(initialGeneration);
@@ -45,7 +44,7 @@ namespace GeneticAlgorithmModule.Models
 
                 if (EliteSize > 0)
                 {
-                    EliteStrategy(previousGeneration,newGeneration);
+                    EliteStrategy(previousGeneration, newGeneration);
                 }
 
                 previousGeneration = newGeneration;
@@ -82,11 +81,6 @@ namespace GeneticAlgorithmModule.Models
         public Generation GetFinalGeneration()
         {
             return Generations[^1];
-        }
-
-        public decimal Result()
-        {
-            return GetFinalGeneration().Population.Max(_ => _.Fx);
         }
     }
 }

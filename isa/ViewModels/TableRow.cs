@@ -6,8 +6,6 @@ namespace WpfApplication.ViewModels
 {
     public class TableRow
     {
-
-
         public int Index { get; set; }
         public decimal Value { get; set; }
         public decimal Fx { get; set; }
@@ -16,9 +14,7 @@ namespace WpfApplication.ViewModels
         public double Qx { get; set; }
         public double R { get; set; }
         public decimal XRel { get; set; }
-
-
-
+        
         public static List<TableRow> MapFromGeneration(Generation generation)
         {
             var tableRowList = new List<TableRow>();
@@ -106,7 +102,7 @@ namespace WpfApplication.ViewModels
     
     public class TableRowAllProperties
     {
-        public int lp { get; set; }
+        public int Lp { get; set; }
         public decimal X { get; set; }
         public string XBin { get; set; }
         public decimal Fx { get; set; }
@@ -133,7 +129,7 @@ namespace WpfApplication.ViewModels
                 var individual = generation.Population[i];
                 tableRowList.Add(new TableRowAllProperties
                 {
-                    lp = i + 1,
+                    Lp = i + 1,
                     X = individual.X,
                     XBin = individual.XBin,
                     Fx = individual.Fx,

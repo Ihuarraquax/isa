@@ -6,6 +6,5 @@ namespace GeneticAlgorithmModule.Models.Serializable
     {
         public int GenerationNumber { get; set; }
         public List<IndividualProperties> Population { get; set; }
-
     }
 }

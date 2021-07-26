@@ -4,11 +4,11 @@ namespace NumberFormatManager.Services
 {
     public class NumberFormatService
     {
-        public int A { get; set; }
-        public int B { get; set; }
-        public decimal D { get; set; }
-        public int L { get; set; }
-        public int Precision { get; set; }
+        public int A { get; }
+        public int B { get; }
+        public decimal D { get; }
+        public int L { get; }
+        private int Precision { get; }
         private readonly Random _random;
 
         public NumberFormatService(int a, int b, decimal d,Random random)
@@ -25,7 +25,7 @@ namespace NumberFormatManager.Services
         
         public int RealToInt(decimal real)
         {
-            var dec = ((decimal) 1 / (B - A)) * ((real - A) * (decimal) (Math.Pow(2, L) - 1));
+            var dec = (decimal) 1 / (B - A) * ((real - A) * (decimal) (Math.Pow(2, L) - 1));
             return (int) decimal.Round(dec);
         }
 
@@ -35,7 +35,7 @@ namespace NumberFormatManager.Services
             return binValue.PadLeft(L, '0');
         }
 
-        public int BinToInt(string bin)
+        public static int BinToInt(string bin)
         {
             return Convert.ToInt32(bin, 2);
         }
@@ -58,9 +58,9 @@ namespace NumberFormatManager.Services
             return IntToBin(integer);
         }
         
-        public decimal CalculateFx(decimal x)
+        public static decimal CalculateFx(decimal x)
         {
-            return (x % 1) * (decimal)(Math.Cos(Convert.ToDouble(20m * Convert.ToDecimal(Math.PI) * x)) - Math.Sin(Convert.ToDouble(x)));
+            return x % 1 * (decimal)(Math.Cos(Convert.ToDouble(20m * Convert.ToDecimal(Math.PI) * x)) - Math.Sin(Convert.ToDouble(x)));
         }
 
         public decimal RandomDecimal()
@@ -71,7 +71,7 @@ namespace NumberFormatManager.Services
             return decimal.Round(value, Precision);
         }
         
-        private int GetPrecision(decimal d)
+        private static int GetPrecision(decimal d)
         {
             return BitConverter.GetBytes(decimal.GetBits(d)[3])[2];
         }

@@ -1,6 +1,6 @@
-using System.Reflection;
 using GeneticAlgorithmModule.Models;
 using NUnit.Framework;
+
 namespace GenerationTests
 {
     public class Tests
